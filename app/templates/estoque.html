@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Estoque</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #333;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #0d6efd;
+          }
+          
+          .navbar-nav .nav-link.active {
+            font-weight: bold;
+            color: #198754;
+          }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .no-data {
+            color: #a00; /* Vermelho para indicar ausência de dados */
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <header class="text-center">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">CDG Estoque</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#navbarSupportedContent" 
+                        aria-controls="navbarSupportedContent" 
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/form">Cadastro</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/estoque">Estoque</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
+                        <button class="btn btn-outline-success" type="submit">Buscar</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    
+    <div class="col-8 m-auto pt-2 pb-2 text-center">
+        <h1>Estoque</h1>
+    </div>
+
+    <div class="container">
+        <div class="row text-center">
+            <div class="col">
+                <h2>Quantidade em estoque</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tipo de Material</th>
+                            <th>Quantidade Geral</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if estoque_total %}
+                            {% for tipo_material, quantidade in estoque_total.items %}
+                            <tr>
+                                <td>{{ tipo_material }}</td>
+                                <td id="qtde">{{ quantidade|default:0 }}</td> 
+            
+                                <!-- Adicione mais colunas conforme necessário -->
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="2" class="no-data">Nenhum dado disponível.</td>  <!-- Corrigido para o número de colunas -->
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col">
+                <h2>Estoque Geral</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Entrada/Saída</th>
+                            <th>Tipo de Material</th>
+                            <th>Quantidade Geral</th>
+                            <!-- Adicione mais cabeçalhos conforme necessário -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if funcionarios %}
+                            {% for funcionario in funcionarios %}
+                            <tr>
+                                <td>{{ funcionario.entrada_saida }}</td>
+                                <td>{{ funcionario.tipo_de_material }}</td>
+                                <td>{{ funcionario.qtde_final }}</td>
+
+
+                                <!-- Adicione mais colunas conforme necessário -->
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="9" class="no-data">Nenhum dado disponível.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        
+            
+        </div>
+    </div>
+<script>
+        const qtdeElements = document.getElementsByClassName('qtde');
+
+        // Itera sobre os elementos e faz algo com cada um
+        for (let i = 0; i < qtdeElements.length; i++) {
+            console.log(qtdeElements[i].value); // Exemplo: imprime o valor de cada elemento
+        }
+    
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXlHjAAk/U6e7Q1iGJrAzKV7kGmVprg3A5W9Q5GzI7hXp2Kf6B6Zj/sWpcpN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhG81r6scLFK4pAN5TxF6N6L4e3dCkrPq5q5r5C70T1au4PJKXQ1CrYsG5gP" crossorigin="anonymous"></script>
+</body>
+</html>
