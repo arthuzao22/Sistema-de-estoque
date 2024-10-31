@@ -60,6 +60,11 @@
         #btn-table {
             display: flex;
         }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #6c757d;
+        }
     </style>
 </head>
 
@@ -89,7 +94,38 @@
             </div>
         </div>
     </nav>
+    {% if messages %}
 
+    <!-- Modal -->
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true" id="alert">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Atenção</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <span id="alert-message"></span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <script>
+        window.onload = function() {
+            var myModal = new bootstrap.Modal(document.getElementById('alert'));
+            var alertMessage = document.getElementById('alert-message'); // Corrigido aqui
+            {% for message in messages %}
+              alertMessage.innerText = '{{ message }}'; // Corrigido aqui
+              myModal.show();
+            {% endfor %}
+        }
+    </script>
+  {% endif %}
     <div class="container mt-1">
         <div class="row">
             <!-- Coluna da esquerda: Menu Lateral -->
@@ -133,7 +169,7 @@
                                     <td>{{ dbs.nome }}</td>
                                     <td>{{ dbs.tipo_de_material }}</td>
                                     <td>{{ dbs.folha }}</td>
-                                    <td>{{ dbs.qtde_final }}</td>
+                                    <td id="qtde_alert">{{ dbs.qtde_final }}</td>
                                     <td id="btn-table">
                                         <a href="edit/{{ dbs.id }}" class="btn btn-primary btn-sm">Editar</a>
                                         <a href="delete/{{ dbs.id }}" class="btn btn-danger btn-sm">Deletar</a>
@@ -145,7 +181,18 @@
                 </div>
             </div>
         </div>
+        <footer class="footer">
+            <p>&copy; 2024 CDG Estoque. Todos os direitos reservados.</p>
+        </footer>
     </div>
+    <script>
+        document.querySelectorAll('#qtde_alert').forEach(td => {
+            if (td.innerText == "0") { // Verifica se o conteúdo do td é "0"
+                td.style.background = 'red'; // Altera o background para vermelho
+            }
+        });
+        
+    </script>
     
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>

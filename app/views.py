@@ -9,51 +9,96 @@ from django.contrib import messages
 
 # Create your views here.
 def home(request):
-    data = {}
-    data['db'] = Estoque.objects.all()
-    return render(request, 'index.html', data)
+    try:
+        estoques = Estoque.objects.all().values()
+        df = pd.DataFrame(list(estoques))
+
+        df['qtde_placas_unidades'] = df.apply(calcular_qtde_placas, axis=1)
+        df['qtde_folhas_caixa'] = df.apply(calcular_qtde_caixas, axis=1)
+        df['qtde_bobinas'] = df.apply(calcular_qtde_bobinas, axis=1)
+        df['qtde_bobinas_ensacamento'] = df.apply(calcular_qtde_bobinas_ensacamento, axis=1)
+        df['qtde_contra_capa'] = df.apply(calcular_contra_capa, axis=1)
+        df['qtde_granpeador'] = df.apply(calcular_granpeador, axis=1)
+        df['qtde_grampos'] = df.apply(calcular_grampos, axis=1)
+        df['qtde_folhas_caixa_2'] = df.apply(calcular_caixa_2, axis=1)
+        df['qtde_tintas_toners'] = df.apply(calcular_tintas_toners, axis=1)
+        df['qtde_Wireo'] = df.apply(calcular_Wireo, axis=1)
+        df['qtde_espiral'] = df.apply(calcular_espiral, axis=1)
+
+        df['qtde_final'] = df[['qtde_placas_unidades', 'qtde_folhas_caixa', 'qtde_bobinas',
+                               'qtde_bobinas_ensacamento', 'qtde_contra_capa', 
+                               'qtde_granpeador', 'qtde_grampos', 'qtde_folhas_caixa_2', 
+                               'qtde_tintas_toners', 'qtde_Wireo', 'qtde_espiral']].replace(0, pd.NA).sum(axis=1, skipna=True)
+
+        context = {'db': df.to_dict(orient='records')}
+        return render(request, 'index.html', context)
+    except Exception as e:
+        messages.error(request, f"Erro ao carregar os dados do estoque: {e}")
+        return render(request, 'index.html')
 
 def form(request):
-    data = {}
-    data['form'] = EstoqueForm()
-    return render(request, 'form.html', data)
+    try:
+        data = {'form': EstoqueForm()}
+        return render(request, 'form.html', data)
+    except Exception as e:
+        messages.error(request, f"Erro ao carregar o formulário: {e}")
+        return render(request, 'form.html')
 
 # Create
 def create(request):
-    form = EstoqueForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        messages.success(request, 'O estoque foi salvo com sucesso!')  # Mensagem de sucesso
-        return redirect('form')
-    else:
-        messages.error(request, 'Erro ao salvar o estoque. Por favor, verifique os dados.')  # Mensagem de erro
-    
-    data = {'form': form}  # Passa o formulário em caso de dados inválidos
-    return render(request, 'form.html', data)
+    try:
+        form = EstoqueForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'O estoque foi salvo com sucesso!')
+            return redirect('form')
+        else:
+            messages.error(request, 'Erro ao salvar o estoque. Verifique os dados.')
+        
+        data = {'form': form}
+        return render(request, 'form.html', data)
+    except Exception as e:
+        messages.error(request, f"Erro ao salvar o estoque: {e}")
+        return render(request, 'form.html')
 
 # Edit
 def edit(request, pk):
-    estoque = get_object_or_404(Estoque, pk=pk)  # Safely get object
-    data = {}
-    data['form'] = EstoqueForm(instance=estoque)
-    return render(request, 'form.html', data)
+    try:
+        estoque = get_object_or_404(Estoque, pk=pk)
+        data = {'form': EstoqueForm(instance=estoque)}
+        return render(request, 'form.html', data)
+    except Exception as e:
+        messages.error(request, f"Erro ao editar o estoque: {e}")
+        return redirect('home')
 
 # Update
 def update(request, pk):
-    estoque = get_object_or_404(Estoque, pk=pk)  # Safely get object
-    form = EstoqueForm(request.POST or None, instance=estoque)
-    if form.is_valid():
-        form.save()  # Call save method with parentheses
+    try:
+        estoque = get_object_or_404(Estoque, pk=pk)
+        form = EstoqueForm(request.POST or None, instance=estoque)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'O estoque foi atualizado com sucesso!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Erro ao atualizar o estoque. Verifique os dados.')
+        
+        data = {'form': form}
+        return render(request, 'form.html', data)
+    except Exception as e:
+        messages.error(request, f"Erro ao atualizar o estoque: {e}")
         return redirect('home')
-    data = {'form': form}  # Pass the form back in case of invalid data
-    return render(request, 'form.html', data)
 
 # Delete
 def delete(request, pk):
-    estoque = get_object_or_404(Estoque, pk=pk)
-    db = Estoque.objects.get(pk=pk)
-    db.delete()
-    return redirect('home')
+    try:
+        estoque = get_object_or_404(Estoque, pk=pk)
+        estoque.delete()
+        messages.success(request, 'O estoque foi excluído com sucesso!')
+        return redirect('home')
+    except Exception as e:
+        messages.error(request, f"Erro ao excluir o estoque: {e}")
+        return redirect('home')
 
 
 ############################################################# CALCULOS DE ESTOQUE #############################################################
@@ -162,9 +207,10 @@ def calcular_granpeador(row):
         return 0
     
 def calcular_grampos(row):
-    
+    qtde = row['qtde']
+
     if row['tipo_de_material'] == 'GRAMPO':
-        return calcular_qtde_caixas(row) * 5000
+        return qtde * 5000
     else:
         return 0
 
@@ -185,7 +231,43 @@ def calcular_caixa_2(row):
 def calcular_tintas_toners(row):
     qtde = row['qtde']
 
-    if row['tipo_de_material'] == 'TINTAS E TONERS':
+    if row['tipo_de_material'] in ['KONICA AMARELO'
+                                  ,'KONICA AZUL'
+                                  ,'KONICA MAGENTA'
+                                  ,'PHASER 7800 AMARELO'
+                                  ,'PHASER 7800 AZUL'
+                                  ,'PHASER 7800 MAGENTA'
+                                  ,'PHASER 7800 PRETO'
+                                  ,'TINTA EPSON AMARELO (CORANTE)'
+                                  ,'TINTA EPSON AMARELO (PIG)'
+                                  ,'TINTA EPSON AZUL (CORANTE)'
+                                  ,'TINTA EPSON AZUL (PIG)'
+                                  ,'TINTA EPSON MAGENTA (CORANTE)'
+                                  ,'TINTA EPSON MAGENTA (PIG)'
+                                  ,'TINTA EPSON PRETO (CORANTE)'
+                                  ,'TINTA EPSON PRETO (PIG)'
+                                  ,'TINTA FOTOGRAFICA AMARELO'
+                                  ,'TINTA FOTOGRAFICA AZUL'
+                                  ,'TINTA FOTOGRAFICA AZUL CLAR0'
+                                  ,'TINTA FOTOGRAFICA MAGENTA'
+                                  ,'TINTA FOTOGRAFICA MAGENTA CLARO'
+                                  ,'TINTA FOTOGRAFICA PRETO'
+                                  ,'TINTA PLOTTER AMARELO'
+                                  ,'TINTA PLOTTER AZUL'
+                                  ,'TINTA PLOTTER MAGENTA'
+                                  ,'TINTA PLOTTER PRETO'
+                                  ,'TINTA RISO AMARELA'
+                                  ,'TINTA RISO AZUL'
+                                  ,'TINTA RISO MAGENTA'
+                                  ,'TINTA RISO PRETO'
+                                  ,'TONER C75 AMARELA'
+                                  ,'TONER C75 AZUL'
+                                  ,'TONER C75 MAGENTA'
+                                  ,'TONER C75 PRETO'
+                                  ,'TONNER ORIGINAL'
+                                  ,'TONNER RW'
+                                  ,'TONNER RW'
+                                  ,'KONICA PRETO']:
         return qtde
     else:
         return 0
@@ -299,16 +381,21 @@ def calcular_Wireo(row):
     
 
 def calcular_estoque_total(df):
-    # Agrupa as entradas e saídas
     entradas = df[df['entrada_saida'] == 'Entrada'].groupby('tipo_de_material')['qtde_final'].sum()
     saidas = df[df['entrada_saida'] == 'Saida'].groupby('tipo_de_material')['qtde_final'].sum()
-
-    # Calcula o estoque total como entrada menos saída
     estoque_total = entradas.subtract(saidas, fill_value=0)
     return estoque_total
 
+def calcular_estoque_total_especifico(df):
+    entradas = df[df['entrada_saida'] == 'Entrada'].groupby(['tipo_de_material', 'tipo'])['qtde'].sum()
+    saidas = df[df['entrada_saida'] == 'Saida'].groupby(['tipo_de_material', 'tipo'])['qtde'].sum()
+    
+    estoque_total_geral = entradas.subtract(saidas, fill_value=0).reset_index(name='estoque_total')
+    
+    return estoque_total_geral
+
+
 def estoque(request):
-    # Carrega os dados do banco de dados
     estoque = Estoque.objects.all()
     data = {
         'entrada_saida': [f.entrada_saida for f in estoque],
@@ -322,11 +409,10 @@ def estoque(request):
         'folha': [f.folha for f in estoque],
     }
 
-    # Cria um DataFrame e converte 'qtde' para Decimal
     df = pd.DataFrame(data)
     df['qtde'] = df['qtde'].apply(Decimal)
 
-    # Calculos adicionais
+    # Aplicação das funções de cálculo
     df['qtde_placas_unidades'] = df.apply(calcular_qtde_placas, axis=1)
     df['qtde_folhas_caixa'] = df.apply(calcular_qtde_caixas, axis=1)
     df['qtde_bobinas'] = df.apply(calcular_qtde_bobinas, axis=1)
@@ -339,27 +425,27 @@ def estoque(request):
     df['qtde_Wireo'] = df.apply(calcular_Wireo, axis=1)
     df['qtde_espiral'] = df.apply(calcular_espiral, axis=1)
 
-    # Verifica as colunas antes do cálculo de qtde_final
-    print("Colunas disponíveis no DataFrame:", df.columns)
-
-    # Calcula a quantidade final
+    # Cálculo de quantidade final
     df['qtde_final'] = df[['qtde_placas_unidades', 'qtde_folhas_caixa', 'qtde_bobinas',
-                            'qtde_bobinas_ensacamento', 'qtde_contra_capa', 
-                            'qtde_granpeador', 'qtde_grampos', 'qtde_folhas_caixa_2', 
-                            'qtde_tintas_toners', 'qtde_Wireo', 'qtde_espiral']].replace(0, pd.NA).sum(axis=1, skipna=True)
+                           'qtde_bobinas_ensacamento', 'qtde_contra_capa', 
+                           'qtde_granpeador', 'qtde_grampos', 'qtde_folhas_caixa_2', 
+                           'qtde_tintas_toners', 'qtde_Wireo', 'qtde_espiral']].sum(axis=1, skipna=True)
 
-    # Chama a função calcular_estoque_total para calcular o estoque total
+    # Cálculo do estoque total e total geral
     estoque_total = calcular_estoque_total(df)
+    estoque_total_geral = calcular_estoque_total_especifico(df)
 
-    # Converte o resultado para dicionário, se necessário
+    # Converte o resultado para dicionário
     estoque_total_dict = estoque_total.to_dict()
+    estoque_total_geral_dict = estoque_total_geral.to_dict()
 
-    # Adiciona o DataFrame à lista de dicionários para exibir na view
+    # Adiciona os dados ao contexto
     data['df'] = df.to_dict(orient='records')
-    data['estoque_total'] = estoque_total_dict  # Adiciona o total ao contexto
+    data['estoque_total'] = estoque_total_dict
+    data['estoque_total_geral'] = estoque_total_geral.to_dict(orient='records')
     
-    print(data['estoque_total'])  # Exibe o estoque total no console para depuração
-    
-    return render(request, 'estoque.html', {'funcionarios': data['df'], 'estoque_total': data['estoque_total']})
+    return render(request, 'estoque.html', {'df_geral': data['df'], 
+                                            'estoque_total': data['estoque_total'], 
+                                            'estoque_total_geral': data['estoque_total_geral']})
 
 
