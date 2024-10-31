@@ -106,12 +106,12 @@ def delete(request, pk):
 
 # Função para cálculo de quantidade de placas
 def calcular_qtde_placas(row):
-    if row['tipo'] == 'Placas' and row['qtde'] > 0:
+    if row['tipo'] == 'Placas':
         material = row['tipo_de_material']
         formato = row['formato']
         qtde = row['qtde']
         
-        if material == "A4 OFFSSET 120g" and formato == "640x880":
+        if material == 'A4 OFFSSET 120g' and formato == '640x880':
             return qtde * 1500
         elif material == "A4 OFFSSET 120g" and formato == "660x960":
             return qtde * 2250
@@ -154,13 +154,15 @@ def calcular_qtde_placas(row):
 
 def calcular_qtde_caixas(row):
     qtde = row['qtde']
-
-    if row['tipo_de_material'][:2] == 'A4':
-        if row['tipo'] == 'Cx' and row['formato'] == 'Impressão':
-            return qtde * 5000
-    elif row['tipo_de_material'][:2] == 'A3':
-        if row['tipo'] == 'Cx' and row['formato'] == 'Impressão':
-            return qtde * 5000
+    if row['tipo'] == 'Cx':
+        
+        if row['tipo_de_material'][:2] == 'A4':
+            if row['tipo'] == 'Cx' and row['formato'] == 'Impressão':
+                return qtde * 5000
+        elif row['tipo_de_material'][:2] == 'A3':
+            if row['tipo'] == 'Cx' and row['formato'] == 'Impressão':
+                return qtde * 5000
+        return 0
     return 0
 
 def calcular_qtde_bobinas(row):
@@ -190,12 +192,14 @@ def calcular_qtde_bobinas_ensacamento(row):
 def calcular_contra_capa(row):
     qtde = row['qtde']
     
-    if row['tipo_de_material'] == 'CAPA PLASTICA INCOLOR':
-        return calcular_qtde_caixas(row) * 100
-    if row['tipo_de_material'] == 'CONTRA CAPA PLASTICA AZUL':
-        return calcular_qtde_caixas(row) * 100
-    if row['tipo_de_material'] == 'CONTRA CAPA PLASTICA PRETO':
-        return calcular_qtde_caixas(row) * 100
+    if row['tipo']=='Cx':
+        if row['tipo_de_material'] == 'CAPA PLASTICA INCOLOR':
+            return qtde * 10 * 100
+        if row['tipo_de_material'] == 'CONTRA CAPA PLASTICA AZUL':
+            return qtde * 10 * 100
+        if row['tipo_de_material'] == 'CONTRA CAPA PLASTICA PRETO':
+            return qtde* 10 * 100
+        return 0
     return 0
 
 def calcular_granpeador(row):
@@ -354,7 +358,6 @@ def calcular_espiral(row):
     else:
         return 0
 
-    
 def calcular_Wireo(row):
     qtde = row['qtde']
     tipo = row['tipo']
@@ -379,6 +382,7 @@ def calcular_Wireo(row):
     else:
         return 0
     
+
 
 def calcular_estoque_total(df):
     entradas = df[df['entrada_saida'] == 'Entrada'].groupby('tipo_de_material')['qtde_final'].sum()

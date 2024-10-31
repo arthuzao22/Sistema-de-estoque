@@ -55,11 +55,7 @@
             padding: 20px;
             margin-top: 30px;
         }
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            color: #6c757d;
-        }
+
     </style>
     <title>Cadastro de Movimentação</title>
 </head>
@@ -124,26 +120,26 @@
               </div>
 
               <div class="form-group">
+                <label for="formato">Formato:</label>
+                <select id="formato" name="formato" class="form-control" onchange="atualizaSubcategoria()">
+                    <option value="" {% if form.formato.value == "" %}selected{% endif %}>Selecione um tipo</option>
+                    <option value="Acabamento" {% if form.formato.value == "Acabamento" %}selected{% endif %}>Acabamento</option>
+                    <option value="Impressão" {% if form.formato.value == "Impressão" %}selected{% endif %}>Impressão</option>
+                    <option value="Expedição" {% if form.formato.value == "Expedição" %}selected{% endif %}>Expedição</option>
+                    <option value="Limpeza" {% if form.formato.value == "Limpeza" %}selected{% endif %}>Limpeza</option>
+                    <option value="TintaTonner" {% if form.formato.value == "TintaTonner" %}selected{% endif %}>TintaTonner</option>
+                    <option value="Escritório" {% if form.formato.value == "Escritório" %}selected{% endif %}>Escritório</option>
+                    <option value="Mercado" {% if form.formato.value == "Mercado" %}selected{% endif %}>Mercado</option>
+                </select>
+            </div>
+
+              <div class="form-group">
                   <label for="tipo">Unidades:</label>
                   <select id="tipo" name="tipo" class="form-control" onchange="toggleEspecificacoes(this.value)">
                       <option value="" {% if form.tipo.value == "" %}selected{% endif %}></option>
                       <option value="Cx" {% if form.tipo.value == "Cx" %}selected{% endif %}>Cx</option>
                       <option value="Unidades" {% if form.tipo.value == "Unidades" %}selected{% endif %}>Unidades</option>
                       <option value="Placas" {% if form.tipo.value == "Placas" %}selected{% endif %}>Placas</option>
-                  </select>
-              </div>
-
-              <div class="form-group">
-                  <label for="formato">Formato:</label>
-                  <select id="formato" name="formato" class="form-control" onchange="atualizaSubcategoria()">
-                      <option value="" {% if form.formato.value == "" %}selected{% endif %}>Selecione um tipo</option>
-                      <option value="Acabamento" {% if form.formato.value == "Acabamento" %}selected{% endif %}>Acabamento</option>
-                      <option value="Impressão" {% if form.formato.value == "Impressão" %}selected{% endif %}>Impressão</option>
-                      <option value="Expedição" {% if form.formato.value == "Expedição" %}selected{% endif %}>Expedição</option>
-                      <option value="Limpeza" {% if form.formato.value == "Limpeza" %}selected{% endif %}>Limpeza</option>
-                      <option value="TintaTonner" {% if form.formato.value == "TintaTonner" %}selected{% endif %}>TintaTonner</option>
-                      <option value="Escritório" {% if form.formato.value == "Escritório" %}selected{% endif %}>Escritório</option>
-                      <option value="Mercado" {% if form.formato.value == "Mercado" %}selected{% endif %}>Mercado</option>
                   </select>
               </div>
 
