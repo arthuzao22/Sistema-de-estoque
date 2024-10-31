@@ -48,7 +48,7 @@
 </head>
 <body>
     <header class="text-center">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-primary">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">CDG Estoque</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
@@ -87,8 +87,16 @@
         <div class="row text-center">
             <div class="col">
                 <h2>Quantidade em estoque</h2>
-                <table>
-                    <thead>
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        {% comment %} <tr>
+                            <th>
+                                <input type="text" id="nome" name="nome" class="form-control" value="{{ form.nome.value|default_if_none:'' }}" required>
+                            </th>
+                            <th>
+                                <a href="" class="btn btn-primary btn-sm">Filtrar</a>
+                            </th>
+                        </tr> {% endcomment %}
                         <tr>
                             <th>Tipo de Material</th>
                             <th>Quantidade Geral</th>
@@ -99,7 +107,7 @@
                             {% for tipo_material, quantidade in estoque_total.items %}
                             <tr>
                                 <td>{{ tipo_material }}</td>
-                                <td id="qtde">{{ quantidade|default:0 }}</td> 
+                                <td id="qtde">{{ quantidade|default:0 }} Unidades</td> 
             
                                 <!-- Adicione mais colunas conforme necessário -->
                             </tr>
@@ -114,8 +122,8 @@
             </div>
             <div class="col">
                 <h2>Estoque Geral</h2>
-                <table>
-                    <thead>
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
                         <tr>
                             <th>Entrada/Saída</th>
                             <th>Tipo de Material</th>
