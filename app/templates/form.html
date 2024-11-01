@@ -10,14 +10,52 @@
             background-color: #f1f1f1;
             padding-bottom: 60px;
         }
-        .navbar-brand {
-            font-weight: bold;
-            color: #0d6efd;
+        /* Estilo geral da navbar */
+        .navbar {
+          background-color: #1a73e8; /* Azul mais escuro */
         }
-        .navbar-nav .nav-link.active {
-            font-weight: bold;
-            color: #198754;
+        
+        .navbar-brand, .nav-link {
+          color: #ffffff !important; /* Cor dos links e do texto da marca */
+          font-weight: bold; /* Deixa os links e marca em negrito */
         }
+        
+        .nav-link:hover {
+          color: #d0e2ff !important; /* Efeito ao passar o mouse */
+        }
+        
+        /* Botão de busca */
+        .form-control {
+          border: 1px solid #ffffff;
+          background-color: #f1f3f4;
+          color: #000;
+        }
+        
+        .btn-outline-success {
+          color: #ffffff;
+          border-color: #ffffff;
+        }
+        
+        .btn-outline-success:hover {
+          background-color: #34a853;
+          color: #ffffff;
+          border-color: #34a853;
+        }
+
+        /* Ajuste de espaçamento e tamanho */
+        .navbar-nav .nav-item {
+          margin-right: 15px;
+      }
+      .navbar-brand {
+          font-size: 1.8rem;
+      }
+      .container {
+          display: flex; /* Ativa o Flexbox */
+          flex-direction: column; /* Organiza os itens em coluna */
+          align-items: center; /* Centraliza horizontalmente */
+          padding: 20px; /* Espaçamento interno */
+      }
+
         .header {
             background-color: #007bff;
             color: white;
@@ -56,11 +94,42 @@
             margin-top: 30px;
         }
 
+        {% comment %} LOADIND DE CARREGAMENTO {% endcomment %}
+
+        /* Estilos para o fundo do carregamento */
+        #loading {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        /* Estilos para o spinner */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #ccc;
+            border-top-color: #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+      
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+
     </style>
     <title>Cadastro de Movimentação</title>
 </head>
 <body>
-
   <nav class="navbar navbar-expand-lg navbar-light bg-primary">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">CDG Estoque</a>
@@ -78,6 +147,9 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/form">Cadastro</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/home">Listagem</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/estoque">Estoque</a>
@@ -99,7 +171,7 @@
         <div id="inicial">
             <div id="feedback" class="mt-3"></div>
         <div class="card">
-          <form action="{% if form.instance.pk %}/update/{{ form.instance.pk }}/{% else %}/create/{% endif %}" method="POST">
+          <form action="{% if form.instance.pk %}/update/{{ form.instance.pk }}/{% else %}/create/{% endif %}" method="POST" >
               {% csrf_token %}
               <div class="form-group">
                   <label for="entrada_saida">Entrada/Saída:</label>
@@ -121,8 +193,8 @@
 
               <div class="form-group">
                 <label for="formato">Formato:</label>
-                <select id="formato" name="formato" class="form-control" onchange="atualizaSubcategoria()">
-                    <option value="" {% if form.formato.value == "" %}selected{% endif %}>Selecione um tipo</option>
+                <select id="formato" name="formato" class="form-control" onchange="atualizaTipo(); atualizaSubcategoria()"  >
+                    <option value="">Selecione um tipo</option>
                     <option value="Acabamento" {% if form.formato.value == "Acabamento" %}selected{% endif %}>Acabamento</option>
                     <option value="Impressão" {% if form.formato.value == "Impressão" %}selected{% endif %}>Impressão</option>
                     <option value="Expedição" {% if form.formato.value == "Expedição" %}selected{% endif %}>Expedição</option>
@@ -149,11 +221,17 @@
                       <option value="">Selecione uma subcategoria</option>
                   </select>
               </div>
-              
+
               <div class="form-group">
-                  <label for="nome">Nome:</label>
-                  <input type="text" id="nome" name="nome" class="form-control" value="{{ form.nome.value|default_if_none:'' }}" required>
-              </div>
+                <label for="nome">Nome:</label>
+                <select id="nome" name="nome" class="form-control" required>
+                    <option value="">Selecione um nome</option>
+                    <option value="Igor" {% if form.formato.value == "Igor" %}selected{% endif %}>Igor</option>
+                    <option value="Leonan" {% if form.formato.value == "Leonan" %}selected{% endif %}>Leonan</option>
+                    <option value="Samuel" {% if form.formato.value == "Samuel" %}selected{% endif %}>Samuel</option>
+                    <option value="Outros" {% if form.formato.value == "Outros" %}selected{% endif %}>Outros</option>
+                </select>
+            </div>
               
               <div id="especificacoes" class="hidden">
                   <div class="form-group">
@@ -163,7 +241,7 @@
 
                   <div class="form-group">
                       <label for="formato_da_folha">Formato:</label>
-                      <select id="formato_da_folha" name="formato_da_folha" class="form-control" onchange="atualizaSubcategoria()">
+                      <select id="formato_da_folha" name="formato_da_folha" class="form-control" >
                           <option value="null" {% if form.formato_da_folha.value == "null" %}selected{% endif %}>Selecione um tamanho</option>
                           <option value="640x880" {% if form.formato_da_folha.value == "640x880" %}selected{% endif %}>640x880</option>
                           <option value="660x960" {% if form.formato_da_folha.value == "660x960" %}selected{% endif %}>660x960</option>
@@ -197,11 +275,16 @@
             <span id="alert-message"></span>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button onclick="loading-btn()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
+
+  <div id="loading" style="display: none;">
+    <div class="spinner"></div>
+</div>
+
 
   <script>
       window.onload = function() {
@@ -219,6 +302,43 @@
 </html>
 
     <script>
+
+          // Função para exibir o spinner de carregamento
+          function showLoading() {
+            document.getElementById('loading').style.display = 'flex';
+          }
+
+          // Função para ocultar o spinner de carregamento
+          function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+          }
+
+          // Adiciona o evento de submissão do formulário
+          document.querySelector('form').addEventListener('submit', function(event) {
+            // Exibe o spinner de carregamento
+            showLoading();
+          });
+
+         function atualizaTipo() {
+            // Captura os elementos "formato" e "tipo"
+            var formato = document.getElementById("formato").value;
+            var tipo = document.getElementById("tipo");
+            
+            // Limpa as opções existentes no campo "tipo"
+            tipo.innerHTML = '<option value="">Selecione um tipo</option>';
+    
+            // Adiciona as opções de acordo com o valor selecionado em "formato"
+            if (formato === "Impressão") {
+                tipo.innerHTML += '<option value="Placas">Placas</option>';
+                tipo.innerHTML += '<option value="Cx">Cx</option>';
+            } else if (formato === "Acabamento") {
+                tipo.innerHTML += '<option value="Cx">Cx</option>';
+                tipo.innerHTML += '<option value="Unidade">Unidade</option>';
+            } else if (formato === "TintaTonner") {
+                tipo.innerHTML += '<option value="Unidade">Unidade</option>';
+            }
+        }
+    
 
         function checkConnection() {
             inicial = document.getElementById('inicial')
@@ -264,158 +384,65 @@
       });
 
       const subcategorias = {
-        Acabamento: 
-        [
-          'ESPIRAL BRANCO 9 MM'
-          ,'ESPIRAL BRANCO 12 MM'
-          ,'ESPIRAL BRANCO 14 MM'
-          ,'ESPIRAL BRANCO 17 MM'
-          ,'ESPIRAL BRANCO 20 MM'
-          ,'ESPIRAL BRANCO 23 MM'
-          ,'ESPIRAL BRANCO 25 MM'
-          ,'ESPIRAL BRANCO 29 MM'
-          ,'ESPIRAL BRANCO 33 MM'
-          ,'ESPIRAL BRANCO 40 MM'
-          ,'ESPIRAL BRANCO 45 MM'
-          ,'ESPIRAL BRANCO 50 MM'
-          ,'ESPIRAL INCOLOR 9 MM'
-          ,'ESPIRAL INCOLOR 12 MM'
-          ,'ESPIRAL INCOLOR 14 MM'
-          ,'ESPIRAL INCOLOR 17 MM'
-          ,'ESPIRAL INCOLOR 20 MM'
-          ,'ESPIRAL INCOLOR 23 MM'
-          ,'ESPIRAL INCOLOR 25 MM'
-          ,'ESPIRAL INCOLOR 29 MM'
-          ,'ESPIRAL INCOLOR 33 MM'
-          ,'ESPIRAL INCOLOR 40 MM'
-          ,'ESPIRAL INCOLOR 45 MM'
-          ,'ESPIRAL INCOLOR 50 MM'
-          ,'ESPIRAL PRETO 9 MM'
-          ,'ESPIRAL PRETO 12 MM'
-          ,'ESPIRAL PRETO 14 MM'
-          ,'ESPIRAL PRETO 17 MM'
-          ,'ESPIRAL PRETO 20 MM'
-          ,'ESPIRAL PRETO 23 MM'
-          ,'ESPIRAL PRETO 25 MM'
-          ,'ESPIRAL PRETO 29 MM'
-          ,'ESPIRAL PRETO 33 MM'
-          ,'ESPIRAL PRETO 40 MM'
-          ,'ESPIRAL PRETO 45 MM'
-          ,'ESPIRAL PRETO 50 MM'
-          ,'WIRE-O BRANCO (1/2)'
-          ,'WIRE-O BRANCO (1-1/4)'
-          ,'WIRE-O BRANCO (3/4)'
-          ,'WIRE-O PRETO (1/2)'
-          ,'WIRE-O PRETO (1-1/4)'
-          ,'WIRE-O PRETO (3/4)'
-          ,'BOBINA DE LAMINAÇÃO BRILHO (MAIOR)'
-          ,'BOBINA DE LAMINAÇÃO BRILHO (MENOR)'
-          ,'BOBINA DE LAMINAÇÃO FOSCO'
-          ,'BOBINA DE LAMINAÇÃO HOLOGRAFICA'
-          ,'BOBINA PLASTICA (SHIRINK)'
-          ,'BOBINA PLASTICA A3 (ENSACAMENTO)'
-          ,'BOBINA PLASTICA A4 (ENSACAMENTO)'
-          ,'CAPA PLASTICA INCOLOR'
-          ,'CONTRA CAPA PLASTICA AZUL'
-          ,'CONTRA CAPA PLASTICA PRETO'
-          ,'GRAMPEADOR'
-          ,'GRAMPO'
-          ,'CX 2 - 20'
-          ,'CX 2 - 25'
+        Acabamento: [
+            'ESPIRAL BRANCO 9 MM', 'ESPIRAL BRANCO 12 MM', 'ESPIRAL BRANCO 14 MM', 'ESPIRAL BRANCO 17 MM', 'ESPIRAL BRANCO 20 MM',
+            'ESPIRAL BRANCO 23 MM', 'ESPIRAL BRANCO 25 MM', 'ESPIRAL BRANCO 29 MM', 'ESPIRAL BRANCO 33 MM', 'ESPIRAL BRANCO 40 MM',
+            'ESPIRAL BRANCO 45 MM', 'ESPIRAL BRANCO 50 MM', 'ESPIRAL INCOLOR 9 MM', 'ESPIRAL INCOLOR 12 MM', 'ESPIRAL INCOLOR 14 MM',
+            'ESPIRAL INCOLOR 17 MM', 'ESPIRAL INCOLOR 20 MM', 'ESPIRAL INCOLOR 23 MM', 'ESPIRAL INCOLOR 25 MM', 'ESPIRAL INCOLOR 29 MM',
+            'ESPIRAL INCOLOR 33 MM', 'ESPIRAL INCOLOR 40 MM', 'ESPIRAL INCOLOR 45 MM', 'ESPIRAL INCOLOR 50 MM', 'ESPIRAL PRETO 9 MM',
+            'ESPIRAL PRETO 12 MM', 'ESPIRAL PRETO 14 MM', 'ESPIRAL PRETO 17 MM', 'ESPIRAL PRETO 20 MM', 'ESPIRAL PRETO 23 MM',
+            'ESPIRAL PRETO 25 MM', 'ESPIRAL PRETO 29 MM', 'ESPIRAL PRETO 33 MM', 'ESPIRAL PRETO 40 MM', 'ESPIRAL PRETO 45 MM',
+            'ESPIRAL PRETO 50 MM', 'WIRE-O BRANCO (1/2)', 'WIRE-O BRANCO (1-1/4)', 'WIRE-O BRANCO (3/4)', 'WIRE-O PRETO (1/2)',
+            'WIRE-O PRETO (1-1/4)', 'WIRE-O PRETO (3/4)', 'BOBINA DE LAMINAÇÃO BRILHO (MAIOR)', 'BOBINA DE LAMINAÇÃO BRILHO (MENOR)',
+            'BOBINA DE LAMINAÇÃO FOSCO', 'BOBINA DE LAMINAÇÃO HOLOGRAFICA', 'BOBINA PLASTICA (SHIRINK)', 'BOBINA PLASTICA A3 (ENSACAMENTO)',
+            'BOBINA PLASTICA A4 (ENSACAMENTO)', 'CAPA PLASTICA INCOLOR', 'CONTRA CAPA PLASTICA AZUL', 'CONTRA CAPA PLASTICA PRETO',
+            'GRAMPEADOR', 'GRAMPO', 'CX 2 - 20', 'CX 2 - 25'
         ],
-        Impressão: 
-        [
-           'A4 OFFSSET 75g'
-          ,'A4 OFFSSET 75g AMARELO'
-          ,'A4 OFFSSET 75g AZUL'
-          ,'A4 OFFSSET 75g MARFIM'
-          ,'A4 OFFSSET 75g ROSA'
-          ,'A4 OFFSSET 75g VERDE'
-          ,'A3 OFFSSET 75g'
-          ,'A4 OFFSSET 90g'
-          ,'A3 OFFSSET 90g'
-          ,'A4 OFFSSET 120g'
-          ,'A3 OFFSSET 120g'
-          ,'A4 OFFSSET 180g'
-          ,'A3 OFFSSET 180g'
-          ,'A4 OFFSSET 240g'
-          ,'A3 OFFSSET 240g'
-          ,'A4 COUCHÊ 90g'
-          ,'A3 COUCHÊ 90g'
-          ,'A4 COUCHÊ 115g'
-          ,'A3 COUCHÊ 115g'
-          ,'A4 COUCHÊ 170g'
-          ,'A3 COUCHÊ 170g'
-          ,'A4 COUCHÊ 250g'
-          ,'A3 COUCHÊ 250g'
-          ,'A4 SUPREMO 300g'
-          ,'A3 SUPREMO 300g'
-          ,'ADESIVO FOSCO'
+        Impressão: [
+            'A4 OFFSSET 75g', 'A4 OFFSSET 75g AMARELO', 'A4 OFFSSET 75g AZUL', 'A4 OFFSSET 75g MARFIM', 'A4 OFFSSET 75g ROSA',
+            'A4 OFFSSET 75g VERDE', 'A3 OFFSSET 75g', 'A4 OFFSSET 90g', 'A3 OFFSSET 90g', 'A4 OFFSSET 120g', 'A3 OFFSSET 120g',
+            'A4 OFFSSET 180g', 'A3 OFFSSET 180g', 'A4 OFFSSET 240g', 'A3 OFFSSET 240g', 'A4 COUCHÊ 90g', 'A3 COUCHÊ 90g',
+            'A4 COUCHÊ 115g', 'A3 COUCHÊ 115g', 'A4 COUCHÊ 170g', 'A3 COUCHÊ 170g', 'A4 COUCHÊ 250g', 'A3 COUCHÊ 250g',
+            'A4 SUPREMO 300g', 'A3 SUPREMO 300g', 'ADESIVO FOSCO'
         ],
-        TintaTonner: 
-        [
-          'KONICA AMARELO'
-          ,'KONICA AZUL'
-          ,'KONICA MAGENTA'
-          ,'PHASER 7800 AMARELO'
-          ,'PHASER 7800 AZUL'
-          ,'PHASER 7800 MAGENTA'
-          ,'PHASER 7800 PRETO'
-          ,'TINTA EPSON AMARELO (CORANTE)'
-          ,'TINTA EPSON AMARELO (PIG)'
-          ,'TINTA EPSON AZUL (CORANTE)'
-          ,'TINTA EPSON AZUL (PIG)'
-          ,'TINTA EPSON MAGENTA (CORANTE)'
-          ,'TINTA EPSON MAGENTA (PIG)'
-          ,'TINTA EPSON PRETO (CORANTE)'
-          ,'TINTA EPSON PRETO (PIG)'
-          ,'TINTA FOTOGRAFICA AMARELO'
-          ,'TINTA FOTOGRAFICA AZUL'
-          ,'TINTA FOTOGRAFICA AZUL CLAR0'
-          ,'TINTA FOTOGRAFICA MAGENTA'
-          ,'TINTA FOTOGRAFICA MAGENTA CLARO'
-          ,'TINTA FOTOGRAFICA PRETO'
-          ,'TINTA PLOTTER AMARELO'
-          ,'TINTA PLOTTER AZUL'
-          ,'TINTA PLOTTER MAGENTA'
-          ,'TINTA PLOTTER PRETO'
-          ,'TINTA RISO AMARELA'
-          ,'TINTA RISO AZUL'
-          ,'TINTA RISO MAGENTA'
-          ,'TINTA RISO PRETO'
-          ,'TONER C75 AMARELA'
-          ,'TONER C75 AZUL'
-          ,'TONER C75 MAGENTA'
-          ,'TONER C75 PRETO'
-          ,'TONNER ORIGINAL'
-          ,'TONNER RW'
-          ,'TONNER RW'
-          ,'KONICA PRETO'
-        
+        TintaTonner: [
+            'KONICA AMARELO', 'KONICA AZUL', 'KONICA MAGENTA', 'KONICA PRETO', 'PHASER 7800 AMARELO', 'PHASER 7800 AZUL', 
+            'PHASER 7800 MAGENTA', 'PHASER 7800 PRETO', 'TINTA EPSON AMARELO (CORANTE)', 'TINTA EPSON AMARELO (PIG)', 
+            'TINTA EPSON AZUL (CORANTE)', 'TINTA EPSON AZUL (PIG)', 'TINTA EPSON MAGENTA (CORANTE)', 'TINTA EPSON MAGENTA (PIG)', 
+            'TINTA EPSON PRETO (CORANTE)', 'TINTA EPSON PRETO (PIG)', 'TINTA FOTOGRAFICA AMARELO', 'TINTA FOTOGRAFICA AZUL', 
+            'TINTA FOTOGRAFICA AZUL CLARO', 'TINTA FOTOGRAFICA MAGENTA', 'TINTA FOTOGRAFICA MAGENTA CLARO', 'TINTA FOTOGRAFICA PRETO', 
+            'TINTA PLOTTER AMARELO', 'TINTA PLOTTER AZUL', 'TINTA PLOTTER MAGENTA', 'TINTA PLOTTER PRETO', 'TINTA RISO AMARELA', 
+            'TINTA RISO AZUL', 'TINTA RISO MAGENTA', 'TINTA RISO PRETO', 'TONER C75 AMARELA', 'TONER C75 AZUL', 'TONER C75 MAGENTA', 
+            'TONER C75 PRETO', 'TONNER ORIGINAL', 'TONNER RW'
         ],
         Expedição: ['Caixas', 'Paletes'],
         Limpeza: ['Detergentes', 'Desinfetantes'],
         Escritório: ['Papelaria', 'Mobiliário'],
         Mercado: ['Alimentos', 'Bebidas']
-      };
+    };
 
-      function atualizaSubcategoria() {
-          const formatoSelect = document.getElementById('formato');
-          const subcategoriaSelect = document.getElementById('tipo_de_material');
+    // Função para atualizar as subcategorias com base no formato selecionado
+    function atualizaSubcategoria() {
+        var formato = document.getElementById("formato").value;
+        var subcategoria = document.getElementById("tipo_de_material");
 
-          // Limpa as opções anteriores
-          subcategoriaSelect.innerHTML = '<option value="">Selecione uma subcategoria</option>';
+        // Limpa as opções apenas se houver subcategorias correspondentes ao valor do formato
+        if (subcategorias[formato]) {
+            // Limpa as opções atuais do campo "Subcategoria"
+            subcategoria.innerHTML = '<option value="">Selecione uma subcategoria</option>';
 
-          const formatoSelecionado = formatoSelect.value;
-          if (formatoSelecionado && subcategorias[formatoSelecionado]) {
-              subcategorias[formatoSelecionado].forEach(function(subcategoria) {
-                  const option = document.createElement('option');
-                  option.value = subcategoria;
-                  option.textContent = subcategoria;
-                  subcategoriaSelect.appendChild(option);
-              });
-          }
-      }
+            // Adiciona as opções de subcategorias disponíveis
+            subcategorias[formato].forEach(function(item) {
+                var option = document.createElement("option");
+                option.value = item;
+                option.textContent = item;
+                subcategoria.appendChild(option);
+            });
+        } else {
+            // Caso não haja subcategorias, restaura a opção padrão
+            subcategoria.innerHTML = '<option value="">Selecione uma subcategoria</option>';
+        }
+    }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

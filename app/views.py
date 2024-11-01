@@ -5,14 +5,25 @@ import pandas as pd  # Certifique-se de que esta linha está presente
 from decimal import Decimal
 from app.forms import EstoqueForm
 from django.contrib import messages
+import time
+
 
 
 # Create your views here.
+from django.db.models import Q
+
+# Create your views here.
 def home(request):
+    tipo_de_material = request.GET.get('tipo_de_material')
+    entrada_saida = request.GET.get('entrada_saida')
+    print(tipo_de_material, entrada_saida)  # Imprime os parâmetros recebidos para debug
+
     try:
+        # Carrega todos os registros de Estoque
         estoques = Estoque.objects.all().values()
         df = pd.DataFrame(list(estoques))
 
+        # Aplica as funções de cálculo
         df['qtde_placas_unidades'] = df.apply(calcular_qtde_placas, axis=1)
         df['qtde_folhas_caixa'] = df.apply(calcular_qtde_caixas, axis=1)
         df['qtde_bobinas'] = df.apply(calcular_qtde_bobinas, axis=1)
@@ -25,16 +36,32 @@ def home(request):
         df['qtde_Wireo'] = df.apply(calcular_Wireo, axis=1)
         df['qtde_espiral'] = df.apply(calcular_espiral, axis=1)
 
+        # Calcula a quantidade final
         df['qtde_final'] = df[['qtde_placas_unidades', 'qtde_folhas_caixa', 'qtde_bobinas',
-                               'qtde_bobinas_ensacamento', 'qtde_contra_capa', 
-                               'qtde_granpeador', 'qtde_grampos', 'qtde_folhas_caixa_2', 
-                               'qtde_tintas_toners', 'qtde_Wireo', 'qtde_espiral']].replace(0, pd.NA).sum(axis=1, skipna=True)
+                                'qtde_bobinas_ensacamento', 'qtde_contra_capa', 
+                                'qtde_granpeador', 'qtde_grampos', 'qtde_folhas_caixa_2', 
+                                'qtde_tintas_toners', 'qtde_Wireo', 'qtde_espiral']].replace(0, pd.NA).sum(axis=1, skipna=True)
 
+        # Filtra pelo tipo de material, se fornecido
+        if tipo_de_material:
+            df = df[df['tipo_de_material'].str.contains(tipo_de_material, case=False, na=False)]  
+            
+        # Filtra pela entrada ou saída, se fornecido
+        if entrada_saida:
+            df = df[df['entrada_saida'].str.contains(entrada_saida, case=False, na=False)]  
+
+        # Ordena os resultados pelo 'id' em ordem decrescente
+        df = df.sort_values(by='id', ascending=False)
+
+        # Passa os dados para o contexto
         context = {'db': df.to_dict(orient='records')}
         return render(request, 'index.html', context)
+    
     except Exception as e:
         messages.error(request, f"Erro ao carregar os dados do estoque: {e}")
         return render(request, 'index.html')
+
+
 
 def form(request):
     try:
@@ -63,6 +90,7 @@ def create(request):
 
 # Edit
 def edit(request, pk):
+
     try:
         estoque = get_object_or_404(Estoque, pk=pk)
         data = {'form': EstoqueForm(instance=estoque)}
@@ -70,6 +98,10 @@ def edit(request, pk):
     except Exception as e:
         messages.error(request, f"Erro ao editar o estoque: {e}")
         return redirect('home')
+    
+# TELA DE BOTOES
+def index_btn(request):
+    return render(request, 'index_btn.html')
 
 # Update
 def update(request, pk):
@@ -100,16 +132,14 @@ def delete(request, pk):
         messages.error(request, f"Erro ao excluir o estoque: {e}")
         return redirect('home')
 
-
 ############################################################# CALCULOS DE ESTOQUE #############################################################
-
 
 # Função para cálculo de quantidade de placas
 def calcular_qtde_placas(row):
-    if row['tipo'] == 'Placas':
+    if row['tipo'] == 'Placas' and row['formato_da_folha'] != 'null':
         material = row['tipo_de_material']
         formato = row['formato']
-        qtde = row['qtde']
+        qtde = int(row['qtde'])  # Certifique-se de que qtde é um número
         
         if material == 'A4 OFFSSET 120g' and formato == '640x880':
             return qtde * 1500
@@ -149,7 +179,6 @@ def calcular_qtde_placas(row):
             return qtde * 600
         elif material == "ADESIVO FOSCO" and formato == "660x960":
             return qtde * 900
-        
     return 0
 
 def calcular_qtde_caixas(row):
@@ -382,8 +411,6 @@ def calcular_Wireo(row):
     else:
         return 0
     
-
-
 def calcular_estoque_total(df):
     entradas = df[df['entrada_saida'] == 'Entrada'].groupby('tipo_de_material')['qtde_final'].sum()
     saidas = df[df['entrada_saida'] == 'Saida'].groupby('tipo_de_material')['qtde_final'].sum()
@@ -398,8 +425,9 @@ def calcular_estoque_total_especifico(df):
     
     return estoque_total_geral
 
-
 def estoque(request):
+    tipo_de_material = request.GET.get('tipo_de_material')
+    print(tipo_de_material)
     estoque = Estoque.objects.all()
     data = {
         'entrada_saida': [f.entrada_saida for f in estoque],
@@ -441,15 +469,22 @@ def estoque(request):
 
     # Converte o resultado para dicionário
     estoque_total_dict = estoque_total.to_dict()
-    estoque_total_geral_dict = estoque_total_geral.to_dict()
+    estoque_total_geral_dict = estoque_total_geral.to_dict(orient='records')
+
+    # Filtra pelo tipo de material, se fornecido
+    if tipo_de_material:
+        estoque_total_dict = [item for item in estoque_total_dict 
+                                     if tipo_de_material.lower() in item['tipo_de_material'].lower()]
 
     # Adiciona os dados ao contexto
     data['df'] = df.to_dict(orient='records')
     data['estoque_total'] = estoque_total_dict
-    data['estoque_total_geral'] = estoque_total_geral.to_dict(orient='records')
-    
-    return render(request, 'estoque.html', {'df_geral': data['df'], 
-                                            'estoque_total': data['estoque_total'], 
-                                            'estoque_total_geral': data['estoque_total_geral']})
+    data['estoque_total_geral'] = estoque_total_geral_dict
+
+    return render(request, 'estoque.html', {
+        'df_geral': data['df'], 
+        'estoque_total': data['estoque_total'], 
+        'estoque_total_geral': data['estoque_total_geral']
+    })
 
 

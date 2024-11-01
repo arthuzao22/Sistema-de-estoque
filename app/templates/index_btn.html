@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        /* Estilo geral da página */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9; /* Cor de fundo suave */
+            color: #333; /* Cor do texto */
+        }
+        /* Estilo da navbar */
+        .navbar {
+            background-color: #1a73e8; /* Azul mais escuro */
+        }
+        .navbar-brand, .nav-link {
+            color: #ffffff !important; /* Cor dos links e do texto da marca */
+            font-weight: bold; /* Deixa os links e marca em negrito */
+        }
+        .nav-link:hover {
+            color: #d0e2ff !important; /* Efeito ao passar o mouse */
+        }
+        /* Botão de busca */
+        .form-control {
+            border: 1px solid #ffffff;
+            background-color: #ffffff;
+            color: #000;
+        }
+        .btn-outline-success {
+            color: #ffffff;
+            border-color: #ffffff;
+        }
+        .btn-outline-success:hover {
+            background-color: #34a853;
+            color: #ffffff;
+            border-color: #34a853;
+        }
+        /* Botão de menu para dispositivos móveis */
+        .navbar-toggler {
+            border-color: #ffffff;
+        }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%2880,80,80,1%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+        /* Estilo dos cartões */
+        .card {
+            border-radius: 15px; /* Cantos arredondados */
+            transition: transform 0.2s; /* Efeito de transição */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra dos cartões */
+        }
+        .card:hover {
+            transform: scale(1.05); /* Efeito de zoom ao passar o mouse */
+        }
+        .card img {
+            border-radius: 15px 15px 0 0; /* Cantos arredondados na imagem do cartão */
+        }
+        /* Ajuste de espaçamento e tamanho */
+        .navbar-nav .nav-item {
+            margin-right: 15px;
+        }
+        .navbar-brand {
+            font-size: 1.8rem;
+        }
+        .container {
+            display: flex; /* Ativa o Flexbox */
+            flex-direction: column; /* Organiza os itens em coluna */
+            align-items: center; /* Centraliza horizontalmente */
+            padding: 20px; /* Espaçamento interno */
+        }
+        h1 {
+            margin-bottom: 30px; /* Espaço abaixo do título */
+            font-size: 2.5rem; /* Tamanho do título */
+            color: #1a73e8; /* Cor do título */
+        }
+        .row {
+            display: flex;
+            justify-content: center; /* Centraliza os cartões */
+            flex-wrap: wrap; /* Permite que os cartões se movam para a próxima linha, se necessário */
+        }
+    </style>
+</head>
+<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">CDG Estoque</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+              data-bs-target="#navbarSupportedContent" 
+              aria-controls="navbarSupportedContent" 
+              aria-expanded="false" 
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/form">Cadastro</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/home">Listagem</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/estoque">Estoque</a>
+          </li>
+        </ul>
+        <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
+          <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+    <div class="container">
+        <h1>CDG Estoque</h1>
+        <div class="row">
+            <div class="col-12 col-md-4"> <!-- Ajuste responsivo -->
+                <a href="form/">
+                    <div class="card mb-3">
+                        <img src="https://cdn-icons-png.flaticon.com/512/753/753399.png" class="card-img-top" alt="Cadastrar">
+                        <div class="card-body">
+                            <h5 class="card-title">Cadastrar</h5>
+                            <p class="card-text">Cadastre novos produtos no sistema com facilidade.</p>
+                            <p class="card-text"><small class="text-muted">Última atualização 3 mins atrás</small></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-md-4"> <!-- Ajuste responsivo -->
+                <a href="home/">
+                    <div class="card mb-3">
+                        <img src="https://cdn-icons-png.flaticon.com/512/380/380037.png" class="card-img-top" alt="Listagem">
+                        <div class="card-body">
+                            <h5 class="card-title">Listagem</h5>
+                            <p class="card-text">Veja a listagem dos produtos cadastrados.</p>
+                            <p class="card-text"><small class="text-muted">Última atualização 3 mins atrás</small></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-md-4"> <!-- Ajuste responsivo -->
+                <a href="estoque/">
+                    <div class="card mb-3">
+                        <img src="https://cdn-icons-png.flaticon.com/128/3827/3827340.png" class="card-img-top" alt="Estoque">
+                        <div class="card-body">
+                            <h5 class="card-title">Estoque</h5>
+                            <p class="card-text">Gerencie seu estoque de maneira eficiente.</p>
+                            <p class="card-text"><small class="text-muted">Última atualização 3 mins atrás</small></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+</body>
+</html>
