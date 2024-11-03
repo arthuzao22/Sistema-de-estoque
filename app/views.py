@@ -48,7 +48,7 @@ def home(request):
         # Ordena os resultados pelo 'id' em ordem decrescente
         df = df.sort_values(by='id', ascending=False)
 
-        paginator = Paginator(df.to_dict(orient='records'), 10)  
+        paginator = Paginator(df.to_dict(orient='records'), 50)  
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 

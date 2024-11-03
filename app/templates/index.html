@@ -115,7 +115,7 @@
                                 <td id="qtde_alert">{{ dbs.qtde_final }}</td>
                                 <td id="btn-table">
                                     <a href="edit/{{ dbs.id }}" class="btn btn-primary btn-sm">Editar</a>
-                                    <a href="delete/{{ dbs.id }}" class="btn btn-danger btn-sm">Deletar</a>
+                                    <button class="btn btn-danger btn-sm" onclick="confirmarExclusao({{ dbs.id }})">Deletar</button>
                                 </td>
                             </tr>
                         {% endfor %}
