@@ -3,19 +3,6 @@ body {
     background-color: #f1f1f1;
     padding-bottom: 60px;
 }
-/* Estilo geral da navbar */
-.navbar {
-  background-color: #1a73e8; /* Azul mais escuro */
-}
-
-.navbar-brand, .nav-link {
-  color: #ffffff !important; /* Cor dos links e do texto da marca */
-  font-weight: bold; /* Deixa os links e marca em negrito */
-}
-
-.nav-link:hover {
-  color: #d0e2ff !important; /* Efeito ao passar o mouse */
-}
 
 /* Botão de busca */
 .form-control {
@@ -35,13 +22,6 @@ body {
   border-color: #34a853;
 }
 
-/* Ajuste de espaçamento e tamanho */
-.navbar-nav .nav-item {
-  margin-right: 15px;
-}
-.navbar-brand {
-  font-size: 1.8rem;
-}
 .container {
   display: flex; /* Ativa o Flexbox */
   flex-direction: column; /* Organiza os itens em coluna */
@@ -117,3 +97,6 @@ h1 {
     to { transform: rotate(360deg); }
 }
 
+.navbar-brand{
+    width: 100px;
+}

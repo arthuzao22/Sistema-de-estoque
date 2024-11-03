@@ -4,13 +4,7 @@ body {
 h1 {
     color: #333;
 }
-/* Ajuste de espaçamento e tamanho */
-.navbar-nav .nav-item {
-    margin-right: 15px;
-}
-.navbar-brand {
-    font-size: 1.8rem;
-}   
+
 /* Botão de busca */
 .form-control {
     border: 1px solid #ffffff;
@@ -52,4 +46,18 @@ tr:hover {
 .no-data {
     color: #a00; /* Vermelho para indicar ausência de dados */
     font-style: italic;
+}
+
+.navbar-brand{
+    width: 100px;
+}
+
+.select_filter{
+    width: 90px;
+    margin-left: 10px;
+
+}
+.button_filter{
+    background-color: transparent;
+    border-color: transparent;
 }
