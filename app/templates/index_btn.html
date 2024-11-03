@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,82 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <style>
-        /* Estilo geral da página */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9; /* Cor de fundo suave */
-            color: #333; /* Cor do texto */
-        }
-        /* Estilo da navbar */
-        .navbar {
-            background-color: #1a73e8; /* Azul mais escuro */
-        }
-        .navbar-brand, .nav-link {
-            color: #ffffff !important; /* Cor dos links e do texto da marca */
-            font-weight: bold; /* Deixa os links e marca em negrito */
-        }
-        .nav-link:hover {
-            color: #d0e2ff !important; /* Efeito ao passar o mouse */
-        }
-        /* Botão de busca */
-        .form-control {
-            border: 1px solid #ffffff;
-            background-color: #ffffff;
-            color: #000;
-        }
-        .btn-outline-success {
-            color: #ffffff;
-            border-color: #ffffff;
-        }
-        .btn-outline-success:hover {
-            background-color: #34a853;
-            color: #ffffff;
-            border-color: #34a853;
-        }
-        /* Botão de menu para dispositivos móveis */
-        .navbar-toggler {
-            border-color: #ffffff;
-        }
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%2880,80,80,1%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-        }
-        /* Estilo dos cartões */
-        .card {
-            border-radius: 15px; /* Cantos arredondados */
-            transition: transform 0.2s; /* Efeito de transição */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra dos cartões */
-        }
-        .card:hover {
-            transform: scale(1.05); /* Efeito de zoom ao passar o mouse */
-        }
-        .card img {
-            border-radius: 15px 15px 0 0; /* Cantos arredondados na imagem do cartão */
-        }
-        /* Ajuste de espaçamento e tamanho */
-        .navbar-nav .nav-item {
-            margin-right: 15px;
-        }
-        .navbar-brand {
-            font-size: 1.8rem;
-        }
-        .container {
-            display: flex; /* Ativa o Flexbox */
-            flex-direction: column; /* Organiza os itens em coluna */
-            align-items: center; /* Centraliza horizontalmente */
-            padding: 20px; /* Espaçamento interno */
-        }
-        h1 {
-            margin-bottom: 30px; /* Espaço abaixo do título */
-            font-size: 2.5rem; /* Tamanho do título */
-            color: #1a73e8; /* Cor do título */
-        }
-        .row {
-            display: flex;
-            justify-content: center; /* Centraliza os cartões */
-            flex-wrap: wrap; /* Permite que os cartões se movam para a próxima linha, se necessário */
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'CSS/style_index_btn.css' %}">
+
 </head>
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
     <div class="container-fluid">
@@ -156,7 +84,7 @@
             </div>
         </div>
     </div>
-
+    <script src="{% static 'js/script_index_btn.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>

@@ -8,107 +8,8 @@
     <title>Sistema de Estoque</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
-    <link rel="stylesheet" href="{% static 'style/style_index.css' %}" />
+    <link rel="stylesheet" href="{% static 'CSS/style_index.css' %}">
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            padding-bottom: 60px;
-        }
-      
-        .navbar-brand {
-            font-weight: bold;
-            color: #0d6efd;
-        }
-      
-        .navbar-nav .nav-link.active {
-            font-weight: bold;
-            color: #198754;
-        }
-      
-        #tirulocentral {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #343a40;
-        }
-      
-        .btn-success {
-            margin: 5px;
-            width: 150px;
-        }
-      
-        table {
-            margin-top: 20px;
-        }
-      
-        .table-dark th {
-            text-align: center;
-        }
-      
-        h1 {
-            color: #343a40;
-            font-family: 'Arial', sans-serif;
-            margin-bottom: 30px;
-        }
-      
-        td, th {
-            vertical-align: middle;
-            text-align: center;
-        }
-      
-        #btn-table {
-            display: flex;
-        }
-
-        /* Estilo geral da navbar */
-.navbar {
-    background-color: #1a73e8; /* Azul mais escuro */
-}
-
-.navbar-brand, .nav-link {
-    color: #ffffff !important; /* Cor dos links e do texto da marca */
-    font-weight: bold; /* Deixa os links e marca em negrito */
-}
-
-.nav-link:hover {
-    color: #d0e2ff !important; /* Efeito ao passar o mouse */
-}
-
-/* Botão de busca */
-.form-control {
-    border: 1px solid #ffffff;
-    background-color: #f1f3f4;
-    color: #000;
-}
-
-.btn-outline-success {
-    color: #ffffff;
-    border-color: #ffffff;
-}
-
-.btn-outline-success:hover {
-    background-color: #34a853;
-    color: #ffffff;
-    border-color: #34a853;
-}
-
-        /* Ajuste de espaçamento e tamanho */
-        .navbar-nav .nav-item {
-            margin-right: 15px;
-        }
-        .navbar-brand {
-            font-size: 1.8rem;
-        }
-        .container {
-            display: flex; /* Ativa o Flexbox */
-            flex-direction: column; /* Organiza os itens em coluna */
-            align-items: center; /* Centraliza horizontalmente */
-            padding: 20px; /* Espaçamento interno */
-        }
-
-
-    </style>
 </head>
 
 <body>
@@ -246,15 +147,7 @@
             <p>&copy; 2024 CDG Estoque. Todos os direitos reservados.</p>
         </footer>
     </div>
-    <script>
-        document.querySelectorAll('#qtde_alert').forEach(td => {
-            if (td.innerText == "0") { // Verifica se o conteúdo do td é "0"
-                td.style.background = 'red'; // Altera o background para vermelho
-            }
-        });
-        
-    </script>
-    
+    <script src="{% static 'js/script_index.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>

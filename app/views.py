@@ -16,7 +16,7 @@ from django.db.models import Q
 def home(request):
     tipo_de_material = request.GET.get('tipo_de_material')
     entrada_saida = request.GET.get('entrada_saida')
-    print(tipo_de_material, entrada_saida)  # Imprime os parâmetros recebidos para debug
+    #print(tipo_de_material, entrada_saida)  # Imprime os parâmetros recebidos para debug
 
     try:
         # Carrega todos os registros de Estoque
@@ -426,9 +426,14 @@ def calcular_estoque_total_especifico(df):
     return estoque_total_geral
 
 def estoque(request):
+    # Obtém o tipo de material a partir da solicitação GET
     tipo_de_material = request.GET.get('tipo_de_material')
-    print(tipo_de_material)
+    tipo_material_geral = request.GET.get('tipo_material_geral')
+
+    # Consulta todos os itens no queryset
     estoque = Estoque.objects.all()
+
+    # Monta o dicionário de dados com as informações do queryset
     data = {
         'entrada_saida': [f.entrada_saida for f in estoque],
         'data': [f.data for f in estoque],
@@ -471,10 +476,14 @@ def estoque(request):
     estoque_total_dict = estoque_total.to_dict()
     estoque_total_geral_dict = estoque_total_geral.to_dict(orient='records')
 
-    # Filtra pelo tipo de material, se fornecido
+    # Filtra o estoque_total pelo tipo de material, se fornecido
     if tipo_de_material:
-        estoque_total_dict = [item for item in estoque_total_dict 
-                                     if tipo_de_material.lower() in item['tipo_de_material'].lower()]
+        estoque_total_dict = {tipo: qtd for tipo, qtd in estoque_total_dict.items()
+                              if tipo_de_material.lower() in tipo.lower()}
+    # Filtra o estoque_total pelo tipo_material_geral, se fornecido
+    if tipo_material_geral:
+        estoque_total_geral_dict = [item for item in estoque_total_geral_dict
+                                    if tipo_material_geral.lower() in item['tipo_de_material'].lower()]
 
     # Adiciona os dados ao contexto
     data['df'] = df.to_dict(orient='records')
@@ -486,5 +495,6 @@ def estoque(request):
         'estoque_total': data['estoque_total'], 
         'estoque_total_geral': data['estoque_total_geral']
     })
+    
 
 

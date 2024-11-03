@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -5,64 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Estoque</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        h1 {
-            color: #333;
-        }
-        /* Ajuste de espaçamento e tamanho */
-        .navbar-nav .nav-item {
-            margin-right: 15px;
-        }
-        .navbar-brand {
-            font-size: 1.8rem;
-        }   
-        /* Botão de busca */
-        .form-control {
-            border: 1px solid #ffffff;
-            background-color: #f1f3f4;
-            color: #000;
-        }
+    <link rel="stylesheet" href="{% static 'CSS/style_estoque.css' %}">
 
-        .btn-outline-success {
-            color: #ffffff;
-            border-color: #ffffff;
-        }
-
-        .btn-outline-success:hover {
-            background-color: #34a853;
-            color: #ffffff;
-            border-color: #34a853;
-        }
-
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-        .no-data {
-            color: #a00; /* Vermelho para indicar ausência de dados */
-            font-style: italic;
-        }
-
-    </style>
 </head>
 <body>
     <header class="text-center">
@@ -108,26 +54,33 @@
         <div class="row text-center">
             <div class="col">
                 <h2>Quantidade em estoque</h2>
-                <form action="{% url 'estoque' %}" method="get">
-                    {% csrf_token %}
-                    <label for="">Tipo de material</label>
-                    <input type="text" id="tipo_de_material" name="tipo_de_material">
-                    <button type="submit">Filtrar</button>
-                </form>
+
                 <table class="table table-striped table-hover">
                     <thead class="table-dark">
-                        {% comment %} <tr>
-                            <th>
-                                <input type="text" id="nome" name="nome" class="form-control" value="{{ form.nome.value|default_if_none:'' }}" required>
-                            </th>
-                            <th>
-                                <a href="" class="btn btn-primary btn-sm">Filtrar</a>
-                            </th>
-                        </tr> {% endcomment %}
                         <tr>
-                            <th>Tipo de Material</th>
+                            <th col-index="4">
+                                <div style="display: flex; align-items: center;">
+                                    Tipo de Material
+                                    <form action="{% url 'estoque' %}" method="get" style="display: inline;">
+                                        {% csrf_token %}
+                                        <select id="tipo_de_material" name="tipo_de_material" style="width: 100px; margin-left: 5px;">
+                                            <option value=""></option>
+                                            {% for tipo_material, quantidade in estoque_total.items %}
+                                                <option value="{{ tipo_material }}">{{ tipo_material }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <button type="submit" style="margin-left: 5px; ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                              </svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </th>
                             <th>Quantidade Unidades</th>
                         </tr>
+                        
+                        
                     </thead>
                     <tbody>
                         {% if estoque_total %}
@@ -152,7 +105,25 @@
                 <table class="table table-striped table-hover">
                     <thead class="table-dark">
                         <tr>
-                            <th>Tipo de Material</th>
+                            <th col-index="4">
+                                <div style="display: flex; align-items: center;">
+                                    Tipo de Material
+                                    <form action="{% url 'estoque' %}" method="get" style="display: inline;">
+                                        {% csrf_token %}
+                                        <select id="tipo_material_geral" name="tipo_material_geral" style="width: 100px; margin-left: 5px;">
+                                            <option value=""></option>
+                                            {% for tipo_material, quantidade in estoque_total.items %}
+                                                <option value="{{ tipo_material }}">{{ tipo_material }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <button type="submit" style="margin-left: 5px; ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                              </svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </th>
                             <th>Estoque Total</th>
                         </tr>
                     </thead>
@@ -206,17 +177,8 @@
     </script>
   {% endif %}
 
-<script>
-        const qtdeElements = document.getElementsByClassName('qtde');
-
-        // Itera sobre os elementos e faz algo com cada um
-        for (let i = 0; i < qtdeElements.length; i++) {
-            console.log(qtdeElements[i].value); // Exemplo: imprime o valor de cada elemento
-        }
-    
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="{% static 'js/script_form.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXlHjAAk/U6e7Q1iGJrAzKV7kGmVprg3A5W9Q5GzI7hXp2Kf6B6Zj/sWpcpN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhG81r6scLFK4pAN5TxF6N6L4e3dCkrPq5q5r5C70T1au4PJKXQ1CrYsG5gP" crossorigin="anonymous"></script>
