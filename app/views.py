@@ -6,20 +6,15 @@ from decimal import Decimal
 from app.forms import EstoqueForm
 from django.contrib import messages
 import time
-
-
-
-# Create your views here.
 from django.db.models import Q
+from django.core.paginator import Paginator
+from django.shortcuts import render
 
-# Create your views here.
 def home(request):
     tipo_de_material = request.GET.get('tipo_de_material')
     entrada_saida = request.GET.get('entrada_saida')
-    #print(tipo_de_material, entrada_saida)  # Imprime os parâmetros recebidos para debug
 
     try:
-        # Carrega todos os registros de Estoque
         estoques = Estoque.objects.all().values()
         df = pd.DataFrame(list(estoques))
 
@@ -44,17 +39,21 @@ def home(request):
 
         # Filtra pelo tipo de material, se fornecido
         if tipo_de_material:
-            df = df[df['tipo_de_material'].str.contains(tipo_de_material, case=False, na=False)]  
+            df = df[df['tipo_de_material'].str.contains(tipo_de_material, case=False, na=False)]
             
         # Filtra pela entrada ou saída, se fornecido
         if entrada_saida:
-            df = df[df['entrada_saida'].str.contains(entrada_saida, case=False, na=False)]  
+            df = df[df['entrada_saida'].str.contains(entrada_saida, case=False, na=False)]
 
         # Ordena os resultados pelo 'id' em ordem decrescente
         df = df.sort_values(by='id', ascending=False)
 
+        paginator = Paginator(df.to_dict(orient='records'), 10)  
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         # Passa os dados para o contexto
-        context = {'db': df.to_dict(orient='records')}
+        context = {'page_obj': page_obj}
         return render(request, 'index.html', context)
     
     except Exception as e:
