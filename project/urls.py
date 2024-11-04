@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from app.views import home, form, create, edit, update, delete, estoque, index_btn
+from app.views import home, form, create, edit, update, delete, estoque, index_btn, download_database
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -12,4 +12,5 @@ urlpatterns = [
     path('home/delete/<int:pk>/', delete, name='delete'),  
     path('estoque/', estoque, name='estoque'),
     path('', index_btn, name='index_btn'),
+    path('download-db/', download_database, name='download_database'),  # Atualizado
 ]

@@ -9,6 +9,10 @@ import time
 from django.db.models import Q
 from django.core.paginator import Paginator
 from django.shortcuts import render
+from django.http import FileResponse
+from django.conf import settings
+import os
+
 
 def home(request):
     tipo_de_material = request.GET.get('tipo_de_material')
@@ -18,8 +22,8 @@ def home(request):
         estoques = Estoque.objects.all().values()
         df = pd.DataFrame(list(estoques))
 
-        # Aplica as funções de cálculo
         df['qtde_placas_unidades'] = df.apply(calcular_qtde_placas, axis=1)
+        df['qtde_placas_unidades_sem_tamanho'] = df.apply(calcular_qtde_placas_sem_tamanho, axis=1)
         df['qtde_folhas_caixa'] = df.apply(calcular_qtde_caixas, axis=1)
         df['qtde_bobinas'] = df.apply(calcular_qtde_bobinas, axis=1)
         df['qtde_bobinas_ensacamento'] = df.apply(calcular_qtde_bobinas_ensacamento, axis=1)
@@ -31,11 +35,11 @@ def home(request):
         df['qtde_Wireo'] = df.apply(calcular_Wireo, axis=1)
         df['qtde_espiral'] = df.apply(calcular_espiral, axis=1)
 
-        # Calcula a quantidade final
-        df['qtde_final'] = df[['qtde_placas_unidades', 'qtde_folhas_caixa', 'qtde_bobinas',
-                                'qtde_bobinas_ensacamento', 'qtde_contra_capa', 
-                                'qtde_granpeador', 'qtde_grampos', 'qtde_folhas_caixa_2', 
-                                'qtde_tintas_toners', 'qtde_Wireo', 'qtde_espiral']].replace(0, pd.NA).sum(axis=1, skipna=True)
+        # Cálculo de quantidade final
+        df['qtde_final'] = df[['qtde_placas_unidades', 'qtde_placas_unidades_sem_tamanho', 'qtde_folhas_caixa', 'qtde_bobinas',
+                           'qtde_bobinas_ensacamento', 'qtde_contra_capa', 
+                           'qtde_granpeador', 'qtde_grampos', 'qtde_folhas_caixa_2', 
+                           'qtde_tintas_toners', 'qtde_Wireo', 'qtde_espiral']].sum(axis=1, skipna=True)
 
         # Filtra pelo tipo de material, se fornecido
         if tipo_de_material:
@@ -48,7 +52,7 @@ def home(request):
         # Ordena os resultados pelo 'id' em ordem decrescente
         df = df.sort_values(by='id', ascending=False)
 
-        paginator = Paginator(df.to_dict(orient='records'), 50)  
+        paginator = Paginator(df.to_dict(orient='records'), 30)  
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
@@ -59,8 +63,6 @@ def home(request):
     except Exception as e:
         messages.error(request, f"Erro ao carregar os dados do estoque: {e}")
         return render(request, 'index.html')
-
-
 
 def form(request):
     try:
@@ -135,51 +137,60 @@ def delete(request, pk):
 
 # Função para cálculo de quantidade de placas
 def calcular_qtde_placas(row):
-    if row['tipo'] == 'Placas' and row['formato_da_folha'] != 'null':
+    if row['formato_da_folha'] != 'null':
         material = row['tipo_de_material']
-        formato = row['formato']
+        formato = row['formato_da_folha']
         qtde = int(row['qtde'])  # Certifique-se de que qtde é um número
-        
+        #print(formato)
+
         if material == 'A4 OFFSSET 120g' and formato == '640x880':
             return qtde * 1500
         elif material == "A4 OFFSSET 120g" and formato == "660x960":
             return qtde * 2250
-        elif material == "A3 OFFSSET 120g":
-            return qtde * 1000
         elif material == "A4 OFFSSET 180g" and formato == "640x880":
             return qtde * 1500
         elif material == "A4 OFFSSET 180g" and formato == "660x960":
             return qtde * 2250
-        elif material == "A3 OFFSSET 180g":
-            return qtde * 1000
         elif material == "A4 OFFSSET 240g" and formato == "660x960":
             return qtde * 1350
-        elif material == "A3 OFFSSET 240g":
-            return qtde * 600
         elif material == "A4 COUCHÊ 90g" and formato == "660x960":
             return qtde * 2250
-        elif material == "A3 COUCHÊ 90g":
-            return qtde * 1000
         elif material == "A4 COUCHÊ 115g" and formato == "660x960":
             return qtde * 2250
-        elif material == "A3 COUCHÊ 115g":
-            return qtde * 1000
         elif material == "A4 COUCHÊ 170g" and formato == "660x960":
             return qtde * 2250
-        elif material == "A3 COUCHÊ 170g":
-            return qtde * 1000
         elif material == "A4 COUCHÊ 250g" and formato == "660x960":
             return qtde * 1125
-        elif material == "A3 COUCHÊ 250g":
-            return qtde * 500
         elif material == "A4 SUPREMO 300g" and formato == "660x960":
             return qtde * 1350
-        elif material == "A3 SUPREMO 300g":
-            return qtde * 600
         elif material == "ADESIVO FOSCO" and formato == "660x960":
             return qtde * 900
     return 0
 
+# Função para cálculo de quantidade de placas
+def calcular_qtde_placas_sem_tamanho(row):
+    print(row['tipo'])
+
+    if row['tipo'] == 'Placas' and row['tipo'] == 'Cx':
+        material = row['tipo_de_material']
+        qtde = int(row['qtde'])  # Certifique-se de que qtde é um número
+        if material == "A3 OFFSSET 120g":
+            return qtde * 1000
+        elif material == "A3 OFFSSET 180g":
+            return qtde * 1000
+        elif material == "A3 OFFSSET 240g":
+            return qtde * 600
+        elif material == "A3 COUCHÊ 90g":
+            return qtde * 1000 
+        elif material == "A3 COUCHÊ 115g":
+            return qtde * 1000
+        elif material == "A3 COUCHÊ 170g":
+            return qtde * 1000
+        elif material == "A3 COUCHÊ 250g":
+            return qtde * 500
+        elif material == "A3 SUPREMO 300g":
+            return qtde * 600
+        
 def calcular_qtde_caixas(row):
     qtde = row['qtde']
     if row['tipo'] == 'Cx':
@@ -450,6 +461,7 @@ def estoque(request):
 
     # Aplicação das funções de cálculo
     df['qtde_placas_unidades'] = df.apply(calcular_qtde_placas, axis=1)
+    df['qtde_placas_unidades_sem_tamanho'] = df.apply(calcular_qtde_placas_sem_tamanho, axis=1)
     df['qtde_folhas_caixa'] = df.apply(calcular_qtde_caixas, axis=1)
     df['qtde_bobinas'] = df.apply(calcular_qtde_bobinas, axis=1)
     df['qtde_bobinas_ensacamento'] = df.apply(calcular_qtde_bobinas_ensacamento, axis=1)
@@ -462,7 +474,7 @@ def estoque(request):
     df['qtde_espiral'] = df.apply(calcular_espiral, axis=1)
 
     # Cálculo de quantidade final
-    df['qtde_final'] = df[['qtde_placas_unidades', 'qtde_folhas_caixa', 'qtde_bobinas',
+    df['qtde_final'] = df[['qtde_placas_unidades', 'qtde_placas_unidades_sem_tamanho', 'qtde_folhas_caixa', 'qtde_bobinas',
                            'qtde_bobinas_ensacamento', 'qtde_contra_capa', 
                            'qtde_granpeador', 'qtde_grampos', 'qtde_folhas_caixa_2', 
                            'qtde_tintas_toners', 'qtde_Wireo', 'qtde_espiral']].sum(axis=1, skipna=True)
@@ -495,5 +507,9 @@ def estoque(request):
         'estoque_total_geral': data['estoque_total_geral']
     })
     
-
+def download_database(request):
+    # Caminho completo para o arquivo `db.sqlite3`
+    database_path = os.path.join(settings.BASE_DIR, 'db.sqlite3')
+    # Retorna o arquivo como uma resposta de download
+    return FileResponse(open(database_path, 'rb'), as_attachment=True, filename='db.sqlite3')
 
