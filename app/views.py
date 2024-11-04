@@ -315,7 +315,8 @@ def calcular_tintas_toners(row):
         return qtde
     else:
         return 0
-    
+
+#serve para calcular a qtde de espiral
 def calcular_espiral(row):
     qtde = row['qtde']
     tipo = row['tipo']
@@ -338,7 +339,6 @@ def calcular_espiral(row):
             unidades = 100
             estoque_wireo = qtde * pct * unidades
             return estoque_wireo
-        
 
         elif row['tipo_de_material'] in ["ESPIRAL BRANCO 17 MM", "ESPIRAL INCOLOR 17 MM", "ESPIRAL PRETO 17 MM"]:
             pct = 10
