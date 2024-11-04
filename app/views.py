@@ -13,7 +13,6 @@ from django.http import FileResponse
 from django.conf import settings
 import os
 
-
 def home(request):
     tipo_de_material = request.GET.get('tipo_de_material')
     entrada_saida = request.GET.get('entrada_saida')
@@ -40,6 +39,8 @@ def home(request):
                            'qtde_bobinas_ensacamento', 'qtde_contra_capa', 
                            'qtde_granpeador', 'qtde_grampos', 'qtde_folhas_caixa_2', 
                            'qtde_tintas_toners', 'qtde_Wireo', 'qtde_espiral']].sum(axis=1, skipna=True)
+
+        df['qtde_final'] = df['qtde_final'].astype(int)
 
         # Filtra pelo tipo de material, se fornecido
         if tipo_de_material:
@@ -171,7 +172,7 @@ def calcular_qtde_placas(row):
 def calcular_qtde_placas_sem_tamanho(row):
     print(row['tipo'])
 
-    if row['tipo'] == 'Placas' and row['tipo'] == 'Cx':
+    if row['tipo'] == 'Placas' or row['tipo'] == 'Cx':
         material = row['tipo_de_material']
         qtde = int(row['qtde'])  # Certifique-se de que qtde é um número
         if material == "A3 OFFSSET 120g":
