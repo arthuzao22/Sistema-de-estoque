@@ -323,9 +323,8 @@ def calcular_espiral(row):
     if tipo == 'Cx':
 
         if row['tipo_de_material'] in ["ESPIRAL BRANCO 9 MM", "ESPIRAL INCOLOR 9 MM", "ESPIRAL PRETO 9 MM"]:
-            pct = 20
-            unidades = 100
-            estoque_wireo = qtde * pct * unidades
+            caixa = 1600
+            estoque_wireo = qtde * caixa
             return estoque_wireo
 
         elif row['tipo_de_material'] in ["ESPIRAL INCOLOR 12 MM", "ESPIRAL BRANCO 12 MM", "ESPIRAL PRETO 12 MM"]:
