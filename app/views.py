@@ -11,6 +11,9 @@ from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.http import FileResponse
 from django.conf import settings
+
+from git import Repo
+
 import os
 
 def home(request):
@@ -167,7 +170,6 @@ def calcular_qtde_placas(row):
         elif material == "ADESIVO FOSCO" and formato == "660x960":
             return qtde * 900
     return 0
-
 # Função para cálculo de quantidade de placas
 def calcular_qtde_placas_sem_tamanho(row):
     print(row['tipo'])
@@ -321,11 +323,76 @@ def calcular_espiral(row):
     qtde = row['qtde']
     tipo = row['tipo']
 
-    if tipo == 'Cx':
+    if tipo == 'Pacotes':
 
         if row['tipo_de_material'] in ["ESPIRAL BRANCO 9 MM", "ESPIRAL INCOLOR 9 MM", "ESPIRAL PRETO 9 MM"]:
-            caixa = 1600
-            estoque_wireo = qtde * caixa
+            unidades = 100
+            estoque_wireo = qtde * unidades
+            return estoque_wireo
+
+        elif row['tipo_de_material'] in ["ESPIRAL INCOLOR 12 MM", "ESPIRAL BRANCO 12 MM", "ESPIRAL PRETO 12 MM"]:
+            unidades = 100
+            estoque_wireo = qtde * unidades
+            return estoque_wireo
+
+        elif row['tipo_de_material'] in ["ESPIRAL BRANCO 14 MM", "ESPIRAL INCOLOR 14 MM", "ESPIRAL PRETO 14 MM"]:
+            unidades = 100
+            estoque_wireo = qtde * unidades
+            return estoque_wireo
+
+        elif row['tipo_de_material'] in ["ESPIRAL BRANCO 17 MM", "ESPIRAL INCOLOR 17 MM", "ESPIRAL PRETO 17 MM"]:
+            unidades = 100
+            estoque_wireo = qtde * unidades
+            return estoque_wireo
+
+        elif row['tipo_de_material'] in ["ESPIRAL BRANCO 20 MM", "ESPIRAL INCOLOR 20 MM", "ESPIRAL PRETO 20 MM"]:
+            unidades = 70
+            estoque_wireo = qtde * unidades
+            return estoque_wireo
+
+        elif row['tipo_de_material'] in ["ESPIRAL BRANCO 23 MM", "ESPIRAL INCOLOR 23 MM", "ESPIRAL PRETO 23 MM"]:
+            unidades = 60
+            estoque_wireo = qtde * unidades
+            return estoque_wireo
+
+        elif row['tipo_de_material'] in ["ESPIRAL BRANCO 25 MM", "ESPIRAL INCOLOR 25 MM", "ESPIRAL PRETO 25 MM"]:
+            unidades = 45
+            estoque_wireo = qtde * unidades
+            return estoque_wireo
+
+        elif row['tipo_de_material'] in ["ESPIRAL BRANCO 29 MM", "ESPIRAL INCOLOR 29 MM", "ESPIRAL PRETO 29 MM"]:
+            unidades = 25
+            estoque_wireo = qtde * unidades
+            return estoque_wireo
+
+        elif row['tipo_de_material'] in ["ESPIRAL BRANCO 33 MM", "ESPIRAL INCOLOR 33 MM", "ESPIRAL PRETO 33 MM"]:
+            unidades = 25
+            estoque_wireo = qtde * unidades
+            return estoque_wireo
+
+        elif row['tipo_de_material'] in ["ESPIRAL BRANCO 40 MM", "ESPIRAL INCOLOR 40 MM", "ESPIRAL PRETO 40 MM"]:
+            unidades = 20
+            estoque_wireo = qtde * unidades
+            return estoque_wireo
+
+        elif row['tipo_de_material'] in ["ESPIRAL BRANCO 45 MM", "ESPIRAL INCOLOR 45 MM", "ESPIRAL PRETO 45 MM"]:
+            unidades = 16
+            estoque_wireo = qtde * unidades
+            return estoque_wireo
+
+        elif row['tipo_de_material'] in ["ESPIRAL BRANCO 50 MM", "ESPIRAL INCOLOR 50 MM", "ESPIRAL PRETO 50 MM"]:
+            unidades = 12
+            estoque_wireo = qtde * unidades
+            return estoque_wireo
+        else:
+            return 0
+    
+    elif tipo == 'Cx':
+
+        if row['tipo_de_material'] in ["ESPIRAL BRANCO 9 MM", "ESPIRAL INCOLOR 9 MM", "ESPIRAL PRETO 9 MM"]:
+            pct = 20
+            unidades = 100
+            estoque_wireo = qtde * pct * unidades
             return estoque_wireo
 
         elif row['tipo_de_material'] in ["ESPIRAL INCOLOR 12 MM", "ESPIRAL BRANCO 12 MM", "ESPIRAL PRETO 12 MM"]:
@@ -428,11 +495,67 @@ def calcular_estoque_total(df):
     estoque_total = entradas.subtract(saidas, fill_value=0)
     return estoque_total
 
+import pandas as pd
+
 def calcular_estoque_total_especifico(df):
+    # Ajusta as quantidades para o tipo de material específico
+    for index, row in df.iterrows():
+        if row['tipo'] == 'Pacotes':
+            if row['tipo_de_material'] in ["ESPIRAL BRANCO 9 MM", "ESPIRAL INCOLOR 9 MM", "ESPIRAL PRETO 9 MM"]:
+                df.at[index, 'qtde'] = (row['qtde'] * 100) / (20 * 100)
+                
+            elif row['tipo_de_material'] in ["ESPIRAL INCOLOR 12 MM", "ESPIRAL BRANCO 12 MM", "ESPIRAL PRETO 12 MM"]:
+                df.at[index, 'qtde'] = (row['qtde'] * 100) / (13 * 100)
+    
+            elif row['tipo_de_material'] in ["ESPIRAL BRANCO 14 MM", "ESPIRAL INCOLOR 14 MM", "ESPIRAL PRETO 14 MM"]:
+                df.at[index, 'qtde'] = (row['qtde'] * 100) / (14 * 100)
+    
+    
+            elif row['tipo_de_material'] in ["ESPIRAL BRANCO 17 MM", "ESPIRAL INCOLOR 17 MM", "ESPIRAL PRETO 17 MM"]:
+                df.at[index, 'qtde'] = (row['qtde'] * 100) / (10 * 100)
+    
+    
+            elif row['tipo_de_material'] in ["ESPIRAL BRANCO 20 MM", "ESPIRAL INCOLOR 20 MM", "ESPIRAL PRETO 20 MM"]:
+                df.at[index, 'qtde'] = (row['qtde'] * 100) / (11 * 70)
+    
+    
+            elif row['tipo_de_material'] in ["ESPIRAL BRANCO 23 MM", "ESPIRAL INCOLOR 23 MM", "ESPIRAL PRETO 23 MM"]:
+                df.at[index, 'qtde'] = (row['qtde'] * 100) / (10 * 60)
+    
+    
+            elif row['tipo_de_material'] in ["ESPIRAL BRANCO 25 MM", "ESPIRAL INCOLOR 25 MM", "ESPIRAL PRETO 25 MM"]:
+                df.at[index, 'qtde'] = (row['qtde'] * 100) / (12 * 45)
+    
+    
+            elif row['tipo_de_material'] in ["ESPIRAL BRANCO 29 MM", "ESPIRAL INCOLOR 29 MM", "ESPIRAL PRETO 29 MM"]:
+                df.at[index, 'qtde'] = (row['qtde'] * 100) / (11 * 35)
+    
+    
+            elif row['tipo_de_material'] in ["ESPIRAL BRANCO 33 MM", "ESPIRAL INCOLOR 33 MM", "ESPIRAL PRETO 33 MM"]:
+                df.at[index, 'qtde'] = (row['qtde'] * 100) / (12 * 25)
+    
+    
+            elif row['tipo_de_material'] in ["ESPIRAL BRANCO 40 MM", "ESPIRAL INCOLOR 40 MM", "ESPIRAL PRETO 40 MM"]:
+                df.at[index, 'qtde'] = (row['qtde'] * 100) / (10 * 20)
+    
+    
+            elif row['tipo_de_material'] in ["ESPIRAL BRANCO 45 MM", "ESPIRAL INCOLOR 45 MM", "ESPIRAL PRETO 45 MM"]:
+                df.at[index, 'qtde'] = (row['qtde'] * 100) / (9 * 16)
+    
+    
+            elif row['tipo_de_material'] in ["ESPIRAL BRANCO 50 MM", "ESPIRAL INCOLOR 50 MM", "ESPIRAL PRETO 50 MM"]:
+                df.at[index, 'qtde'] = (row['qtde'] * 100) / (10 * 12)
+
+    
+    # Muda o tipo de 'Pacotes' para 'Cx'
+    df.loc[df['tipo'] == 'Pacotes', 'tipo'] = 'Cx'
+        
+    # Agrupa as quantidades por tipo de material e tipo
     entradas = df[df['entrada_saida'] == 'Entrada'].groupby(['tipo_de_material', 'tipo'])['qtde'].sum()
     saidas = df[df['entrada_saida'] == 'Saida'].groupby(['tipo_de_material', 'tipo'])['qtde'].sum()
     
-    estoque_total_geral = entradas.subtract(saidas, fill_value=0).reset_index(name='estoque_total')
+    # Calcula o estoque total
+    estoque_total_geral = entradas.subtract(saidas, fill_value=0).reset_index(name='estoque_total') 
     
     return estoque_total_geral
 
@@ -509,8 +632,23 @@ def estoque(request):
     })
     
 def download_database(request):
-    # Caminho completo para o arquivo `db.sqlite3`
+    # Caminho do repositório local
+    repo_dir = os.path.join(settings.BASE_DIR, 'db.sqlite3')  # Configure o caminho
+    repo = Repo(repo_dir)
+    
+    # Caminho do arquivo de banco de dados
     database_path = os.path.join(settings.BASE_DIR, 'db.sqlite3')
-    # Retorna o arquivo como uma resposta de download
-    return FileResponse(open(database_path, 'rb'), as_attachment=True, filename='db.sqlite3')
+    
+    # Copia o arquivo para o repositório local
+    os.system(f"cp {database_path} {repo_dir}")
+
+    # Adiciona e faz commit do arquivo
+    repo.git.add('db.sqlite3')
+    repo.index.commit('Atualização automática do banco de dados')
+    
+    # Envia para o GitHub
+    origin = repo.remote(name='origin')
+    origin.push()
+
+    print('Arquivo enviado com sucesso para o GitHub!')
 

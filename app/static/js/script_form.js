@@ -30,6 +30,7 @@ function atualizaTipo() {
     } else if (formato === "Acabamento") {
         tipo.innerHTML += '<option value="Cx">Cx</option>';
         tipo.innerHTML += '<option value="Unidade">Unidade</option>';
+        tipo.innerHTML += '<option value="Pacotes">Pacotes</option>';
     } else if (formato === "TintaTonner") {
         tipo.innerHTML += '<option value="Unidade">Unidade</option>';
     }
