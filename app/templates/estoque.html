@@ -14,8 +14,8 @@
     <header >
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <img  class="navbar-brand" src="{% static 'IMG/logo_png_site.png' %}" alt="Descrição da Imagem"/>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                <img src="{% static 'IMG/logo_png_site.png' %}" alt="Descrição da Imagem" class="img-fluid" style="max-height: 40px;">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
                       data-bs-target="#navbarSupportedContent" 
                       aria-controls="navbarSupportedContent" 
                       aria-expanded="false" 
@@ -53,8 +53,6 @@
         <div class="row text-center">
             <div class="col">
                 <h2>Quantidade em estoque</h2>
-                <a href="{% url 'download_database' %}" style="display: none;">Baixar Banco de Dados</a>
-
                 <table class="table table-striped table-hover">
                     <thead class="table-light">
                         <tr>

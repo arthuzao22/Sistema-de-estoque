@@ -2,3 +2,7 @@
     overflow-x: auto; /* Garante a rolagem horizontal */
     -webkit-overflow-scrolling: touch; /* Suaviza o scroll em dispositivos móveis */
 }
+body {
+    font-family: Arial, sans-serif;
+
+}

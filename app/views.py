@@ -1,21 +1,27 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from app.forms import EstoqueForm
-from app.models import Estoque
-import pandas as pd  # Certifique-se de que esta linha está presente
-from decimal import Decimal
-from app.forms import EstoqueForm
 from django.contrib import messages
-import time
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.core.paginator import Paginator
-from django.shortcuts import render
 from django.http import FileResponse
 from django.conf import settings
+import os
+import time
+import pandas as pd
+from decimal import Decimal
+from app.forms import EstoqueForm
+from app.models import Estoque
 
 from git import Repo
 
-import os
+from googleapiclient.discovery import build
+from google.oauth2 import service_account
+from googleapiclient.http import MediaFileUpload
 
+
+@login_required(login_url='/login/')  # Redireciona para a página de login se não estiver logado
 def home(request):
     tipo_de_material = request.GET.get('tipo_de_material')
     entrada_saida = request.GET.get('entrada_saida')
@@ -39,16 +45,16 @@ def home(request):
 
         # Cálculo de quantidade final
         df['qtde_final'] = df[['qtde_placas_unidades', 'qtde_placas_unidades_sem_tamanho', 'qtde_folhas_caixa', 'qtde_bobinas',
-                           'qtde_bobinas_ensacamento', 'qtde_contra_capa', 
-                           'qtde_granpeador', 'qtde_grampos', 'qtde_folhas_caixa_2', 
-                           'qtde_tintas_toners', 'qtde_Wireo', 'qtde_espiral']].sum(axis=1, skipna=True)
+                               'qtde_bobinas_ensacamento', 'qtde_contra_capa', 
+                               'qtde_granpeador', 'qtde_grampos', 'qtde_folhas_caixa_2', 
+                               'qtde_tintas_toners', 'qtde_Wireo', 'qtde_espiral']].sum(axis=1, skipna=True)
 
         df['qtde_final'] = df['qtde_final'].astype(int)
 
         # Filtra pelo tipo de material, se fornecido
         if tipo_de_material:
             df = df[df['tipo_de_material'].str.contains(tipo_de_material, case=False, na=False)]
-            
+
         # Filtra pela entrada ou saída, se fornecido
         if entrada_saida:
             df = df[df['entrada_saida'].str.contains(entrada_saida, case=False, na=False)]
@@ -63,20 +69,32 @@ def home(request):
         # Passa os dados para o contexto
         context = {'page_obj': page_obj}
         return render(request, 'index.html', context)
-    
+
     except Exception as e:
         messages.error(request, f"Erro ao carregar os dados do estoque: {e}")
         return render(request, 'index.html')
 
+@login_required(login_url='/login/')  # Redireciona para a página de login se não estiver logado
 def form(request):
     try:
-        data = {'form': EstoqueForm()}
+        if request.user.is_authenticated:
+            nome_usuario = request.user.first_name
+        else:
+            nome_usuario = "Visitante"  # Caso o usuário não esteja logado
+
+        data = {
+            'form': EstoqueForm(),
+            'nome_usuario': nome_usuario
+        }
+
         return render(request, 'form.html', data)
     except Exception as e:
         messages.error(request, f"Erro ao carregar o formulário: {e}")
-        return render(request, 'form.html')
+        
+        data = {'nome_usuario': nome_usuario}
+        return render(request, 'form.html', data)
 
-# Create
+@login_required(login_url='/login/')  # Redireciona para a página de login se não estiver logado
 def create(request):
     try:
         form = EstoqueForm(request.POST or None)
@@ -93,7 +111,7 @@ def create(request):
         messages.error(request, f"Erro ao salvar o estoque: {e}")
         return render(request, 'form.html')
 
-# Edit
+@login_required(login_url='/login/')  # Redireciona para a página de login se não estiver logado
 def edit(request, pk):
 
     try:
@@ -104,11 +122,15 @@ def edit(request, pk):
         messages.error(request, f"Erro ao editar o estoque: {e}")
         return redirect('home')
     
-# TELA DE BOTOES
+@login_required
 def index_btn(request):
-    return render(request, 'index_btn.html')
+    if request.user.is_authenticated:
+        nome_usuario = request.user.first_name
+    else:
+        nome_usuario = "Visitante"  # Caso o usuário não esteja logado
+    return render(request, 'index_btn.html', {'nome_usuario': nome_usuario})
 
-# Update
+@login_required(login_url='/login/')  # Redireciona para a página de login se não estiver logado
 def update(request, pk):
     try:
         estoque = get_object_or_404(Estoque, pk=pk)
@@ -126,7 +148,7 @@ def update(request, pk):
         messages.error(request, f"Erro ao atualizar o estoque: {e}")
         return redirect('home')
 
-# Delete
+@login_required(login_url='/login/')  # Redireciona para a página de login se não estiver logado
 def delete(request, pk):
     try:
         estoque = get_object_or_404(Estoque, pk=pk)
@@ -559,6 +581,7 @@ def calcular_estoque_total_especifico(df):
     
     return estoque_total_geral
 
+@login_required(login_url='/login/')  # Redireciona para a página de login se não estiver logado
 def estoque(request):
     # Obtém o tipo de material a partir da solicitação GET
     tipo_de_material = request.GET.get('tipo_de_material')
@@ -632,23 +655,56 @@ def estoque(request):
     })
     
 def download_database(request):
-    # Caminho do repositório local
-    repo_dir = os.path.join(settings.BASE_DIR, 'db.sqlite3')  # Configure o caminho
-    repo = Repo(repo_dir)
-    
-    # Caminho do arquivo de banco de dados
+    # Caminho completo para o arquivo `db.sqlite3`
     database_path = os.path.join(settings.BASE_DIR, 'db.sqlite3')
-    
-    # Copia o arquivo para o repositório local
-    os.system(f"cp {database_path} {repo_dir}")
+    # Retorna o arquivo como uma resposta de download
+    return FileResponse(open(database_path, 'rb'), as_attachment=True, filename='db.sqlite3')
 
-    # Adiciona e faz commit do arquivo
-    repo.git.add('db.sqlite3')
-    repo.index.commit('Atualização automática do banco de dados')
-    
-    # Envia para o GitHub
-    origin = repo.remote(name='origin')
-    origin.push()
+########################################################## LOGIN ###############################################################
 
-    print('Arquivo enviado com sucesso para o GitHub!')
+def login_view(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        senha = request.POST['senha']
+        
+        user = authenticate(request, username=email, password=senha)
+        if user is not None:
+            login(request, user)
+            return redirect('index_btn')  # Redireciona para a página inicial após login bem-sucedido
+        else:
+            # Exibir uma mensagem de erro caso o login falhe
+            messages.error(request, "Credenciais inválidas. Tente novamente.")
+            return render(request, 'login.html')
+
+    return render(request, 'login.html')
+
+@login_required(login_url='/login/')  # Redireciona para a página de login se não estiver logado
+def register_view(request):
+    if request.user.id == 1:
+        if request.method == 'POST':
+            email = request.POST['email']
+            nome = request.POST['nome']
+            senha = request.POST['senha']
+            cargo = request.POST['cargo']
+
+            # Verificar se o email já está registrado
+            if User.objects.filter(email=email).exists():
+                messages.error(request, "Este email já está registrado.")
+                return redirect('register')
+
+            # Criar o novo usuário
+            user = User.objects.create_user(username=email, email=email, password=senha)
+            user.first_name = nome
+            user.last_name = cargo  # Se necessário, armazene o cargo no modelo User ou crie um modelo separado.
+            user.save()
+
+            # Mensagem de sucesso
+            messages.success(request, "Cadastro realizado com sucesso!")
+            return redirect('login')  # Redireciona para a página de login após o registro.
+
+        return render(request, 'register.html')  # Renderiza o formulário de registro
+    else:
+        messages.error(request, "Você não tem permissão para acessar esta página.")
+        return render(request, 'index_btn.html')  # Renderiza o formulário de registro
+
 

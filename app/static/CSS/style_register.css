@@ -10,7 +10,7 @@ body {
     height: 100vh;
 }
 
-.login-container {
+.register-container {
     background-color: white;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -19,7 +19,7 @@ body {
     width: 100%;
 }
 
-.login-form h2 {
+.register-form h2 {
     text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
@@ -70,16 +70,20 @@ button:hover {
     background-color: #003d80;
 }
 
-.register-link {
+.login-link {
     text-align: center;
     margin-top: 15px;
 }
 
-.register-link a {
+.login-link a {
     color: #0056b3;
     text-decoration: none;
 }
 
-.register-link a:hover {
+.login-link a:hover {
     text-decoration: underline;
+}
+
+.navbar-brand{
+    width: 100px;
 }

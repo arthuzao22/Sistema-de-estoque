@@ -3,35 +3,6 @@
 from pathlib import Path
 import os
 
-# ###########################################################################################################
-# Preciso configurar a nova base de dados no 'https://dashboard.sqlitecloud.io/projects/cby0ni6znk/nodes' 
-# pois no render nao esta salvando os dados por causa do plano.
-# entao abaixo esta a configuração da conexão da base de dados
-# verificar o link -> 'https://chatgpt.com/g/g-HxPrv1p8v-code-tutor/c/67297721-7788-800d-9c1e-5b8c4ddf51f4'
-
-# ou jogar esse texto no gpt 
-# o meu banco de dados em sqlite3 esta em minha aplicação no render.com, porem preciso colocar ela no https://docs.sqlitecloud.io/docs/connect-cluster para guardar as informações. Estou usando python3 com Django e a estruturação de pastas esta essa no print acima. porem preciso separar o banco de dados da aplicação, como faço isso?
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',  # ou outro backend se necessário
-#         'NAME': 'System-estoque',  # nome do seu banco no SQLiteCloud
-#         'USER': 'Arthur',                    # seu usuário do SQLiteCloud
-#         'PASSWORD': '08102004Mg!',                  # sua senha do SQLiteCloud
-#         'HOST': 'host_sqlitecloud.com',           # URL ou IP do host do SQLiteCloud
-#         'PORT': 'porta_necessaria',               # porta se for necessária
-#     }
-# }
-
-# ###########################################################################################################
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -46,14 +17,14 @@ SECRET_KEY = 'django-insecure-_jjoltkqc&fmn)m2+!q!9l+@6m%b3i+#v8z98(79=tminxhyc8
 DEBUG = True
 
 # ALLOWED_HOSTS
-#ALLOWED_HOSTS = ['.onrender.com', 'localhost']
+ALLOWED_HOSTS = ['.onrender.com', 'localhost']
 
 # CSRF Trusted Origins
-#CSRF_TRUSTED_ORIGINS = ['https://sistema-de-estoque-sq8r.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://sistema-de-estoque-sq8r.onrender.com']
 
 #PARA RODAR LOCALMENTE
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'http://localhost']
+#ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+#CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'http://localhost']
 
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
