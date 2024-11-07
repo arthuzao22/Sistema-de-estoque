@@ -731,7 +731,7 @@ def subir_para_base_de_dados(request):
             registro.save()
 
         # Redirecionar ou exibir uma mensagem de sucesso
-        return render(request, 'sucesso.html')
+        return render(request, 'register.html')
 
     return render(request, 'upload_excel.html')
         
