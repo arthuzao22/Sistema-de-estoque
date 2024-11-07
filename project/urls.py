@@ -16,4 +16,6 @@ urlpatterns = [
     path('download-db/', download_database, name='download_database'),
     path('login/', login_view, name='login'),
     path('register/', views.register_view, name='register_view'),  # Corrigido para utilizar views
+    path('subir/', views.subir_para_base_de_dados, name='subir_para_base_de_dados'),
+
 ]

@@ -61,7 +61,7 @@
                                     Tipo de Material
                                     <form action="{% url 'estoque' %}" method="get" >
                                         {% csrf_token %}
-                                        <select id="tipo_de_material" name="tipo_de_material" class="select_filter">
+                                        <select id="tipo_de_material" name="tipo_de_material" class="select_filter" style="width: 100px; margin-left: 5px; border-radius: 9px;">
                                             <option value=""></option>
                                             {% for tipo_material, quantidade in estoque_total.items %}
                                                 <option value="{{ tipo_material }}">{{ tipo_material }}</option>
@@ -108,7 +108,7 @@
                                     Tipo de Material
                                     <form action="{% url 'estoque' %}" method="get" style="display: inline;">
                                         {% csrf_token %}
-                                        <select id="tipo_material_geral" name="tipo_material_geral" style="width: 100px; margin-left: 5px;">
+                                        <select id="tipo_material_geral" name="tipo_material_geral"  style="width: 100px; margin-left: 5px; border-radius: 9px;">
                                             <option value=""></option>
                                             {% for tipo_material, quantidade in estoque_total.items %}
                                                 <option value="{{ tipo_material }}">{{ tipo_material }}</option>

@@ -45,7 +45,9 @@
 
   <div class="container mt-3">
     <header class="text-center">
-        <h1>Cadastro de Movimentação </h1>
+        <div class="col-12 text-center mb-4">
+          <h1 class="display-6">Cadastro de Movimentação </h1>
+        </div>
     </header>
     <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 col-xxl-8 m-auto">
         <div id="inicial">
@@ -155,21 +157,58 @@
     </div>
   </div>
 
-  <div id="loading" style="display: none;">
-    <div class="spinner"></div>
+<!-- Spinner de loading -->
+<div id="loading-spinner" class="spinner-border text-primary" role="status" style="display: none;">
+  <span class="visually-hidden">Carregando...</span>
 </div>
 
-
   <script>
-      window.onload = function() {
-          var myModal = new bootstrap.Modal(document.getElementById('alert'));
-          var alertMessage = document.getElementById('alert-message'); // Corrigido aqui
-          {% for message in messages %}
-            alertMessage.innerText = '{{ message }}'; // Corrigido aqui
-            myModal.show();
-          {% endfor %}
-      }
+    // Quando a página carregar
+    window.onload = function() {
+      var myModal = new bootstrap.Modal(document.getElementById('alert'));
+      var alertMessage = document.getElementById('alert-message'); // Corrigido aqui
+      var form = document.querySelector('form');
+      var loadingSpinner = document.getElementById('loading-spinner'); // Spinner de loading
+
+      // Exibir mensagens após o envio
+      {% for message in messages %}
+          alertMessage.innerText = '{{ message }}'; // Corrigido aqui
+          myModal.show();
+      {% endfor %}
+
+      // Função para mostrar o spinner enquanto o formulário é enviado
+      form.onsubmit = function(event) {
+          event.preventDefault(); // Previne o envio normal do formulário
+          loadingSpinner.style.display = 'block'; // Mostra o spinner
+
+          // Agora, envia o formulário via AJAX ou espera a resposta do back-end
+          var formData = new FormData(form);
+
+          fetch(form.action, {
+              method: 'POST',
+              body: formData,
+              headers: {
+                  'X-CSRFToken': '{{ csrf_token }}', // CSRF token para segurança
+              },
+          })
+          .then(response => response.json())
+          .then(data => {
+              // Após o envio bem-sucedido
+              loadingSpinner.style.display = 'none'; // Esconde o spinner
+              alertMessage.innerText = data.message; // Mostra a mensagem de sucesso ou erro
+              myModal.show(); // Exibe o modal
+          })
+          .catch(error => {
+              // Caso ocorra algum erro
+              loadingSpinner.style.display = 'none'; // Esconde o spinner
+              alertMessage.innerText = 'Erro ao enviar dados. Tente novamente.';
+              myModal.show();
+          });
+      };
+  };
 {% endif %}
+
+
     </script>
 
 </body>

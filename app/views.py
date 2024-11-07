@@ -706,5 +706,32 @@ def register_view(request):
     else:
         messages.error(request, "Você não tem permissão para acessar esta página.")
         return render(request, 'index_btn.html')  # Renderiza o formulário de registro
+    
+    
+def subir_para_base_de_dados(request):
+    if request.method == "POST" and request.FILES.get('excelFile'):
+        excel_file = request.FILES['excelFile']
+        
+        # Carregar o arquivo Excel
+        sheet_informacoes = pd.read_excel(excel_file)
 
+        # Iterar sobre as linhas do arquivo e salvar no banco de dados
+        for i in range(len(sheet_informacoes)):
+            registro = Estoque(
+                entrada_saida=sheet_informacoes.loc[i, "entrada_saida"],
+                data=sheet_informacoes.loc[i, "data"],
+                qtde=sheet_informacoes.loc[i, "qtde"],
+                tipo=sheet_informacoes.loc[i, "tipo"],
+                formato=sheet_informacoes.loc[i, "formato"],
+                nome=sheet_informacoes.loc[i, "nome"],
+                tipo_de_material=sheet_informacoes.loc[i, "tipo_de_material"],
+                formato_da_folha=sheet_informacoes.loc[i, "formato_da_folha"],
+                folha=sheet_informacoes.loc[i, "folha"]
+            )
+            registro.save()
 
+        # Redirecionar ou exibir uma mensagem de sucesso
+        return render(request, 'sucesso.html')
+
+    return render(request, 'upload_excel.html')
+        

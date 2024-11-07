@@ -15,6 +15,8 @@ document.querySelector('form').addEventListener('submit', function (event) {
     showLoading();
 });
 
+
+
 function atualizaTipo() {
     // Captura os elementos "formato" e "tipo"
     var formato = document.getElementById("formato").value;
