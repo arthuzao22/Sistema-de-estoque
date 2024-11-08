@@ -14,79 +14,126 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <img src="{% static 'IMG/logo_png_site.png' %}" alt="Descrição da Imagem" class="img-fluid" style="max-height: 40px;">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
-                  data-bs-target="#navbarSupportedContent" 
-                  aria-controls="navbarSupportedContent" 
-                  aria-expanded="false" 
-                  aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" href="/">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/form">Cadastro</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/home">Listagem</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/estoque">Estoque</a>
-              </li>
-            </ul>
-            <form class="d-flex">
-    
-            </form>
-          </div>
-        </div>
-      </nav>
-    <div class="container d-flex justify-content-center align-items-center vh-100">
-        <div class="card p-4" style="width: 100%; max-width: 400px;">
-            <h2 class="text-center mb-4">Registrar</h2>
-            <form action="{% url 'register_view' %}" method="POST">
-                {% csrf_token %}
-                
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="Digite seu email" required>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="nome" class="form-label">Nome</label>
-                    <input type="text" id="nome" name="nome" class="form-control" placeholder="Digite seu nome completo" required>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="senha" class="form-label">Senha</label>
-                    <input type="password" id="senha" name="senha" class="form-control" placeholder="Digite sua senha" required>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="cargo" class="form-label">Cargo</label>
-                    <input type="text" id="cargo" name="cargo" class="form-control" placeholder="Digite seu cargo" required>
-                </div>
-                
-                <button type="submit" class="btn btn-primary w-100">Registrar</button>
-            </form>
-            <hr>
-            <div>
-                <a class="btn btn-primary w-100" href="{% url 'download_database' %}">Baixar Banco de Dados</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                    data-bs-target="#navbarSupportedContent" 
+                    aria-controls="navbarSupportedContent" 
+                    aria-expanded="false" 
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/form">Cadastro</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home">Listagem</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/estoque">Estoque</a>
+                    </li>
+                </ul>
             </div>
-            
-            <!-- Novo botão para abrir arquivo Excel -->
-            <hr><hr>
-            <form action="{% url 'subir_para_base_de_dados' %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="file" name="excelFile" id="excelFile" accept=".xlsx, .xls" class="form-control">
-                <button class="btn btn-primary w-100" type="submit">Subir base de dados</button>
-            </form>
-            
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row g-4">
+            <!-- Primeira coluna: Formulário de Registro -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card p-4">
+                    <h2 class="text-center mb-4">Registrar</h2>
+                    <form action="{% url 'register_view' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Digite seu email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome</label>
+                            <input type="text" id="nome" name="nome" class="form-control" placeholder="Digite seu nome completo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="senha" class="form-label">Senha</label>
+                            <input type="password" id="senha" name="senha" class="form-control" placeholder="Digite sua senha" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cargo" class="form-label">Cargo</label>
+                            <input type="text" id="cargo" name="cargo" class="form-control" placeholder="Digite seu cargo" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Registrar</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Segunda coluna: Download do Banco de Dados -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card p-4 text-center">
+                    <h2 class="text-center mb-4">Banco de Dados</h2>
+                    <a class="btn btn-primary w-100" href="{% url 'download_database' %}">Baixar Banco de Dados</a>
+                </div>
+            </div>
+
+            <!-- Terceira coluna: Upload de Arquivo Excel -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card p-4">
+                    <h2 class="text-center mb-4">Upload Excel</h2>
+                    <form action="{% url 'subir_para_base_de_dados' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="file" name="excelFile" id="excelFile" accept=".xlsx, .xls" class="form-control mb-3">
+                        <button class="btn btn-primary w-100" type="submit">Subir base de dados</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Quarta coluna: Informação ou Links adicionais -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card p-4">
+                    <h2 class="text-center mb-4">Outros Links</h2>
+                    <!-- Você pode adicionar links ou informações adicionais aqui -->
+                    <p class="text-center">Espaço para informações adicionais, links úteis, etc.</p>
+                </div>
+            </div>
         </div>
     </div>
-
-
+    {% if messages %}
+    <!-- Modal -->
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true" id="alert">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Atenção</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <span id="alert-message"></span>
+          </div>
+          <div class="modal-footer">
+            <button onclick="loading-btn()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div id="loading" style="display: none;">
+      <div class="spinner"></div>
+    </div>
+  
+    <script>
+        window.onload = function() {
+            var myModal = new bootstrap.Modal(document.getElementById('alert'));
+            var alertMessage = document.getElementById('alert-message');
+            {% for message in messages %}
+              alertMessage.innerText = '{{ message }}';
+              myModal.show();
+            {% endfor %}
+        }
+    </script>
+  {% endif %}
     <!-- Script do Bootstrap 5.0 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

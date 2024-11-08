@@ -31,7 +31,6 @@ def home(request):
         df = pd.DataFrame(list(estoques))
 
         df['qtde_placas_unidades'] = df.apply(calcular_qtde_placas, axis=1)
-        df['qtde_placas_unidades_sem_tamanho'] = df.apply(calcular_qtde_placas_sem_tamanho, axis=1)
         df['qtde_folhas_caixa'] = df.apply(calcular_qtde_caixas, axis=1)
         df['qtde_bobinas'] = df.apply(calcular_qtde_bobinas, axis=1)
         df['qtde_bobinas_ensacamento'] = df.apply(calcular_qtde_bobinas_ensacamento, axis=1)
@@ -44,7 +43,7 @@ def home(request):
         df['qtde_espiral'] = df.apply(calcular_espiral, axis=1)
 
         # Cálculo de quantidade final
-        df['qtde_final'] = df[['qtde_placas_unidades', 'qtde_placas_unidades_sem_tamanho', 'qtde_folhas_caixa', 'qtde_bobinas',
+        df['qtde_final'] = df[['qtde_placas_unidades', 'qtde_folhas_caixa', 'qtde_bobinas',
                                'qtde_bobinas_ensacamento', 'qtde_contra_capa', 
                                'qtde_granpeador', 'qtde_grampos', 'qtde_folhas_caixa_2', 
                                'qtde_tintas_toners', 'qtde_Wireo', 'qtde_espiral']].sum(axis=1, skipna=True)
@@ -122,13 +121,19 @@ def edit(request, pk):
         messages.error(request, f"Erro ao editar o estoque: {e}")
         return redirect('home')
     
-@login_required
+@login_required(login_url='/login/')  # Apontando para a URL correta de login
 def index_btn(request):
     if request.user.is_authenticated:
         nome_usuario = request.user.first_name
+        id = request.user.id
     else:
         nome_usuario = "Visitante"  # Caso o usuário não esteja logado
-    return render(request, 'index_btn.html', {'nome_usuario': nome_usuario})
+    context = {
+    'nome_usuario': nome_usuario,
+    'id': id  # Certifique-se de que 'id' está definido em algum lugar no código
+    }
+    return render(request, 'index_btn.html', context)
+
 
 @login_required(login_url='/login/')  # Redireciona para a página de login se não estiver logado
 def update(request, pk):
@@ -163,59 +168,66 @@ def delete(request, pk):
 
 # Função para cálculo de quantidade de placas
 def calcular_qtde_placas(row):
-    if row['formato_da_folha'] != 'null':
+    if row['formato_da_folha'] != 'null' and row['tipo'] == 'Placas':
         material = row['tipo_de_material']
         formato = row['formato_da_folha']
-        qtde = int(row['qtde'])  # Certifique-se de que qtde é um número
-        #print(formato)
-
-        if material == 'A4 OFFSSET 120g' and formato == '640x880':
-            return qtde * 1500
-        elif material == "A4 OFFSSET 120g" and formato == "660x960":
-            return qtde * 2250
-        elif material == "A4 OFFSSET 180g" and formato == "640x880":
-            return qtde * 1500
-        elif material == "A4 OFFSSET 180g" and formato == "660x960":
-            return qtde * 2250
-        elif material == "A4 OFFSSET 240g" and formato == "660x960":
-            return qtde * 1350
-        elif material == "A4 COUCHÊ 90g" and formato == "660x960":
-            return qtde * 2250
-        elif material == "A4 COUCHÊ 115g" and formato == "660x960":
-            return qtde * 2250
-        elif material == "A4 COUCHÊ 170g" and formato == "660x960":
-            return qtde * 2250
-        elif material == "A4 COUCHÊ 250g" and formato == "660x960":
-            return qtde * 1125
-        elif material == "A4 SUPREMO 300g" and formato == "660x960":
-            return qtde * 1350
+        qtde = int(row['qtde'])
+        
+        #A3
+        if material == 'A3 OFFSSET 120g' and formato == '640x880':
+            return ((250 / 2) * 4) * qtde
+        elif material == "A3 OFFSSET 120g" and formato == "660x960":
+            return ((250 / 2) * 4) * qtde
+        elif material == "A3 OFFSSET 180g" and formato == "640x880":
+            return ((250 / 2) * 4) * qtde
+        elif material == "A3 COUCHÊ 90g" and formato == "660x960":
+            return ((250 / 2) * 4) * qtde
+        elif material == "A3 COUCHÊ 115g" and formato == "660x960":
+            return ((250 / 2) * 4) * qtde
+        elif material == "A3 COUCHÊ 170g" and formato == "660x960":
+            return ((250 / 2) * 4) * qtde
+        elif material == "A3 COUCHÊ 240g" and formato == "660x960":
+            return ((150 / 2) * 4) * qtde
+        elif material == "A3 COUCHÊ 250g" and formato == "660x960":
+            return ((125 / 2) * 4) * qtde
+        elif material == "A3 Adesivo Colacril 173g" and formato == "660x960":
+            return ((100 / 2) * 4) * qtde
+        elif material == "A3 Adesivo Colacril 190g" and formato == "660x960":
+            return ((100 / 2) * 4) * qtde
+        elif material == "A3 Cartão Triplex 300g" and formato == "660x960":
+            return ((100 / 2) * 4) * qtde
+        elif material == "A3 Duo Design 300g" and formato == "660x960":
+            return ((150 / 2) * 4) * qtde
         elif material == "ADESIVO FOSCO" and formato == "660x960":
             return qtde * 900
-    return 0
-# Função para cálculo de quantidade de placas
-def calcular_qtde_placas_sem_tamanho(row):
-    print(row['tipo'])
-
-    if row['tipo'] == 'Placas' or row['tipo'] == 'Cx':
-        material = row['tipo_de_material']
-        qtde = int(row['qtde'])  # Certifique-se de que qtde é um número
-        if material == "A3 OFFSSET 120g":
-            return qtde * 1000
-        elif material == "A3 OFFSSET 180g":
-            return qtde * 1000
-        elif material == "A3 OFFSSET 240g":
-            return qtde * 600
-        elif material == "A3 COUCHÊ 90g":
-            return qtde * 1000 
-        elif material == "A3 COUCHÊ 115g":
-            return qtde * 1000
-        elif material == "A3 COUCHÊ 170g":
-            return qtde * 1000
-        elif material == "A3 COUCHÊ 250g":
-            return qtde * 500
-        elif material == "A3 SUPREMO 300g":
-            return qtde * 600
         
+        # A4
+        if material == 'A4 OFFSSET 120g' and formato == '640x880':
+            return (250 * 8) * qtde
+        elif material == "A4 OFFSSET 120g" and formato == "660x960":
+            return (250 * 9) * qtde
+        elif material == "A4 OFFSSET 180g" and formato == "640x880":
+            return (250 * 8) * qtde
+        elif material == "A4 COUCHÊ 90g" and formato == "660x960":
+            return (250 * 9) * qtde
+        elif material == "A4 COUCHÊ 115g" and formato == "660x960":
+            return (250 * 9) * qtde
+        elif material == "A4 COUCHÊ 170g" and formato == "660x960":
+            return (250 * 9) * qtde
+        elif material == "A4 COUCHÊ 240g" and formato == "660x960":
+            return (150 * 9) * qtde
+        elif material == "A4 COUCHÊ 250g" and formato == "660x960":
+            return (125 * 9) * qtde
+        elif material == "A3 Adesivo Colacril 173g" and formato == "660x960":
+            return (100 * 9) * qtde
+        elif material == "A3 Adesivo Colacril 190g" and formato == "660x960":
+            return (100 * 9) * qtde
+        elif material == "A3 Cartão Triplex 300g" and formato == "660x960":
+            return (100 * 9) * qtde
+        elif material == "A3 Duo Design 300g" and formato == "660x960":
+            return (150 * 9) * qtde
+    return 0
+
 def calcular_qtde_caixas(row):
     qtde = row['qtde']
     if row['tipo'] == 'Cx':
@@ -225,7 +237,7 @@ def calcular_qtde_caixas(row):
                 return qtde * 5000
         elif row['tipo_de_material'][:2] == 'A3':
             if row['tipo'] == 'Cx' and row['formato'] == 'Impressão':
-                return qtde * 5000
+                return qtde * 2500
         return 0
     return 0
 
@@ -583,76 +595,79 @@ def calcular_estoque_total_especifico(df):
 
 @login_required(login_url='/login/')  # Redireciona para a página de login se não estiver logado
 def estoque(request):
-    # Obtém o tipo de material a partir da solicitação GET
-    tipo_de_material = request.GET.get('tipo_de_material')
-    tipo_material_geral = request.GET.get('tipo_material_geral')
+    try:
+        # Obtém o tipo de material a partir da solicitação GET
+        tipo_de_material = request.GET.get('tipo_de_material')
+        tipo_material_geral = request.GET.get('tipo_material_geral')
 
-    # Consulta todos os itens no queryset
-    estoque = Estoque.objects.all()
+        # Consulta todos os itens no queryset
+        estoque = Estoque.objects.all()
 
-    # Monta o dicionário de dados com as informações do queryset
-    data = {
-        'entrada_saida': [f.entrada_saida for f in estoque],
-        'data': [f.data for f in estoque],
-        'qtde': [f.qtde for f in estoque],
-        'tipo': [f.tipo for f in estoque],
-        'formato': [f.formato for f in estoque],
-        'nome': [f.nome for f in estoque],
-        'tipo_de_material': [f.tipo_de_material for f in estoque],
-        'formato_da_folha': [f.formato_da_folha for f in estoque],
-        'folha': [f.folha for f in estoque],
-    }
+        # Monta o dicionário de dados com as informações do queryset
+        data = {
+            'entrada_saida': [f.entrada_saida for f in estoque],
+            'data': [f.data for f in estoque],
+            'qtde': [f.qtde for f in estoque],
+            'tipo': [f.tipo for f in estoque],
+            'formato': [f.formato for f in estoque],
+            'nome': [f.nome for f in estoque],
+            'tipo_de_material': [f.tipo_de_material for f in estoque],
+            'formato_da_folha': [f.formato_da_folha for f in estoque],
+            'folha': [f.folha for f in estoque],
+        }
 
-    df = pd.DataFrame(data)
-    df['qtde'] = df['qtde'].apply(Decimal)
+        df = pd.DataFrame(data)
+        df['qtde'] = df['qtde'].apply(Decimal)
 
-    # Aplicação das funções de cálculo
-    df['qtde_placas_unidades'] = df.apply(calcular_qtde_placas, axis=1)
-    df['qtde_placas_unidades_sem_tamanho'] = df.apply(calcular_qtde_placas_sem_tamanho, axis=1)
-    df['qtde_folhas_caixa'] = df.apply(calcular_qtde_caixas, axis=1)
-    df['qtde_bobinas'] = df.apply(calcular_qtde_bobinas, axis=1)
-    df['qtde_bobinas_ensacamento'] = df.apply(calcular_qtde_bobinas_ensacamento, axis=1)
-    df['qtde_contra_capa'] = df.apply(calcular_contra_capa, axis=1)
-    df['qtde_granpeador'] = df.apply(calcular_granpeador, axis=1)
-    df['qtde_grampos'] = df.apply(calcular_grampos, axis=1)
-    df['qtde_folhas_caixa_2'] = df.apply(calcular_caixa_2, axis=1)
-    df['qtde_tintas_toners'] = df.apply(calcular_tintas_toners, axis=1)
-    df['qtde_Wireo'] = df.apply(calcular_Wireo, axis=1)
-    df['qtde_espiral'] = df.apply(calcular_espiral, axis=1)
+        # Aplicação das funções de cálculo
+        df['qtde_placas_unidades'] = df.apply(calcular_qtde_placas, axis=1)
+        df['qtde_folhas_caixa'] = df.apply(calcular_qtde_caixas, axis=1)
+        df['qtde_bobinas'] = df.apply(calcular_qtde_bobinas, axis=1)
+        df['qtde_bobinas_ensacamento'] = df.apply(calcular_qtde_bobinas_ensacamento, axis=1)
+        df['qtde_contra_capa'] = df.apply(calcular_contra_capa, axis=1)
+        df['qtde_granpeador'] = df.apply(calcular_granpeador, axis=1)
+        df['qtde_grampos'] = df.apply(calcular_grampos, axis=1)
+        df['qtde_folhas_caixa_2'] = df.apply(calcular_caixa_2, axis=1)
+        df['qtde_tintas_toners'] = df.apply(calcular_tintas_toners, axis=1)
+        df['qtde_Wireo'] = df.apply(calcular_Wireo, axis=1)
+        df['qtde_espiral'] = df.apply(calcular_espiral, axis=1)
 
-    # Cálculo de quantidade final
-    df['qtde_final'] = df[['qtde_placas_unidades', 'qtde_placas_unidades_sem_tamanho', 'qtde_folhas_caixa', 'qtde_bobinas',
-                           'qtde_bobinas_ensacamento', 'qtde_contra_capa', 
-                           'qtde_granpeador', 'qtde_grampos', 'qtde_folhas_caixa_2', 
-                           'qtde_tintas_toners', 'qtde_Wireo', 'qtde_espiral']].sum(axis=1, skipna=True)
+        # Cálculo de quantidade final
+        df['qtde_final'] = df[['qtde_placas_unidades',  'qtde_folhas_caixa', 'qtde_bobinas',
+                               'qtde_bobinas_ensacamento', 'qtde_contra_capa', 
+                               'qtde_granpeador', 'qtde_grampos', 'qtde_folhas_caixa_2', 
+                               'qtde_tintas_toners', 'qtde_Wireo', 'qtde_espiral']].sum(axis=1, skipna=True)
 
-    # Cálculo do estoque total e total geral
-    estoque_total = calcular_estoque_total(df)
-    estoque_total_geral = calcular_estoque_total_especifico(df)
+        # Cálculo do estoque total e total geral
+        estoque_total = calcular_estoque_total(df)
+        estoque_total_geral = calcular_estoque_total_especifico(df)
 
-    # Converte o resultado para dicionário
-    estoque_total_dict = estoque_total.to_dict()
-    estoque_total_geral_dict = estoque_total_geral.to_dict(orient='records')
+        # Converte o resultado para dicionário
+        estoque_total_dict = estoque_total.to_dict()
+        estoque_total_geral_dict = estoque_total_geral.to_dict(orient='records')
 
-    # Filtra o estoque_total pelo tipo de material, se fornecido
-    if tipo_de_material:
-        estoque_total_dict = {tipo: qtd for tipo, qtd in estoque_total_dict.items()
-                              if tipo_de_material.lower() in tipo.lower()}
-    # Filtra o estoque_total pelo tipo_material_geral, se fornecido
-    if tipo_material_geral:
-        estoque_total_geral_dict = [item for item in estoque_total_geral_dict
-                                    if tipo_material_geral.lower() in item['tipo_de_material'].lower()]
+        # Filtra o estoque_total pelo tipo de material, se fornecido
+        if tipo_de_material:
+            estoque_total_dict = {tipo: qtd for tipo, qtd in estoque_total_dict.items()
+                                  if tipo_de_material.lower() in tipo.lower()}
+        # Filtra o estoque_total pelo tipo_material_geral, se fornecido
+        if tipo_material_geral:
+            estoque_total_geral_dict = [item for item in estoque_total_geral_dict
+                                        if tipo_material_geral.lower() in item['tipo_de_material'].lower()]
 
-    # Adiciona os dados ao contexto
-    data['df'] = df.to_dict(orient='records')
-    data['estoque_total'] = estoque_total_dict
-    data['estoque_total_geral'] = estoque_total_geral_dict
+        # Adiciona os dados ao contexto
+        data['df'] = df.to_dict(orient='records')
+        data['estoque_total'] = estoque_total_dict
+        data['estoque_total_geral'] = estoque_total_geral_dict
 
-    return render(request, 'estoque.html', {
-        'df_geral': data['df'], 
-        'estoque_total': data['estoque_total'], 
-        'estoque_total_geral': data['estoque_total_geral']
-    })
+        return render(request, 'estoque.html', {
+            'df_geral': data['df'], 
+            'estoque_total': data['estoque_total'], 
+            'estoque_total_geral': data['estoque_total_geral']
+        })
+    except Exception as e:
+        messages.error(request, f"Erro ao carregar a página de estoque: {e}")
+        return render(request, 'estoque.html')
     
 def download_database(request):
     # Caminho completo para o arquivo `db.sqlite3`
@@ -692,20 +707,28 @@ def register_view(request):
                 messages.error(request, "Este email já está registrado.")
                 return redirect('register')
 
-            # Criar o novo usuário
-            user = User.objects.create_user(username=email, email=email, password=senha)
-            user.first_name = nome
-            user.last_name = cargo  # Se necessário, armazene o cargo no modelo User ou crie um modelo separado.
-            user.save()
+            try:
+                # Criar o novo usuário
+                user = User.objects.create_user(username=email, email=email, password=senha)
+                user.first_name = nome
+                user.last_name = cargo  # Armazene o cargo no campo last_name ou em outro modelo se necessário.
+                user.save()
 
-            # Mensagem de sucesso
-            messages.success(request, "Cadastro realizado com sucesso!")
-            return redirect('login')  # Redireciona para a página de login após o registro.
+                # Mensagem de sucesso
+                messages.success(request, "Cadastro realizado com sucesso!")
+                return redirect('login')  # Redireciona para a página de login após o registro.
+
+            except IntegrityError:
+                messages.error(request, "Erro ao registrar o usuário. Tente novamente.")
+                return redirect('register')
+            except Exception as e:
+                messages.error(request, f"Ocorreu um erro inesperado: {e}")
+                return redirect('register')
 
         return render(request, 'register.html')  # Renderiza o formulário de registro
     else:
         messages.error(request, "Você não tem permissão para acessar esta página.")
-        return render(request, 'index_btn.html')  # Renderiza o formulário de registro
+        return render(request, 'index_btn.html')  # Renderiza a página inicial caso não tenha permissão
     
     
 def subir_para_base_de_dados(request):

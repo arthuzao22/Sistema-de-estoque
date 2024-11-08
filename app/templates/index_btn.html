@@ -34,9 +34,13 @@
           <li class="nav-item">
             <a class="nav-link" href="/estoque">Estoque</a>
           </li>
+          {% if id == 1 %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'register_view' %}">Administrador</a>
+              <a class="nav-link" href="{% url 'register_view' %}">Administrador</a>
           </li>
+            {% endif %}
+      
+
         </ul>
         <form class="d-flex">
 

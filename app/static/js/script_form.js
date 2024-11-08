@@ -98,11 +98,12 @@ const subcategorias = {
         'GRAMPEADOR', 'GRAMPO', 'CX 2 - 20', 'CX 2 - 25'
     ],
     Impressão: [
-        'A4 OFFSSET 75g', 'A4 OFFSSET 75g AMARELO', 'A4 OFFSSET 75g AZUL', 'A4 OFFSSET 75g MARFIM', 'A4 OFFSSET 75g ROSA',
-        'A4 OFFSSET 75g VERDE', 'A3 OFFSSET 75g', 'A4 OFFSSET 90g', 'A3 OFFSSET 90g', 'A4 OFFSSET 120g', 'A3 OFFSSET 120g',
-        'A4 OFFSSET 180g', 'A3 OFFSSET 180g', 'A4 OFFSSET 240g', 'A3 OFFSSET 240g', 'A4 COUCHÊ 90g', 'A3 COUCHÊ 90g',
-        'A4 COUCHÊ 115g', 'A3 COUCHÊ 115g', 'A4 COUCHÊ 170g', 'A3 COUCHÊ 170g', 'A4 COUCHÊ 250g', 'A3 COUCHÊ 250g',
-        'A4 SUPREMO 300g', 'A3 SUPREMO 300g', 'ADESIVO FOSCO'
+        'A4 OFFSSET 120g', 'A3 OFFSSET 120g', 'A4 OFFSSET 180g', 'A3 OFFSSET 180g', 
+        'A4 COUCHÊ 90g', 'A3 COUCHÊ 90g', 'A4 COUCHÊ 115g', 'A3 COUCHÊ 115g', 
+        'A4 COUCHÊ 170g', 'A3 COUCHÊ 170g', 'A4 COUCHÊ 240g', 'A3 COUCHÊ 240g', 
+        'A4 COUCHÊ 250g', 'A3 COUCHÊ 250g', 'A3 Adesivo Colacril 173g', 
+        'A3 Adesivo Colacril 190g', 'A3 Cartão Triplex 300g', 'A3 Duo Design 300g', 
+        'ADESIVO FOSCO'
     ],
     TintaTonner: [
         'KONICA AMARELO', 'KONICA AZUL', 'KONICA MAGENTA', 'KONICA PRETO', 'PHASER 7800 AMARELO', 'PHASER 7800 AZUL',
@@ -113,11 +114,11 @@ const subcategorias = {
         'TINTA PLOTTER AMARELO', 'TINTA PLOTTER AZUL', 'TINTA PLOTTER MAGENTA', 'TINTA PLOTTER PRETO', 'TINTA RISO AMARELA',
         'TINTA RISO AZUL', 'TINTA RISO MAGENTA', 'TINTA RISO PRETO', 'TONER C75 AMARELA', 'TONER C75 AZUL', 'TONER C75 MAGENTA',
         'TONER C75 PRETO', 'TONNER ORIGINAL', 'TONNER RW'
-    ],
-    Expedição: ['Caixas', 'Paletes'],
-    Limpeza: ['Detergentes', 'Desinfetantes'],
-    Escritório: ['Papelaria', 'Mobiliário'],
-    Mercado: ['Alimentos', 'Bebidas']
+    ]
+    // Expedição: ['Caixas', 'Paletes'],
+    // Limpeza: ['Detergentes', 'Desinfetantes'],
+    // Escritório: ['Papelaria', 'Mobiliário'],
+    // Mercado: ['Alimentos', 'Bebidas']
 };
 
 // Função para atualizar as subcategorias com base no formato selecionado

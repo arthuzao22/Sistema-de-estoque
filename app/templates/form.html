@@ -79,11 +79,11 @@
                     <option value="">Selecione um tipo</option>
                     <option value="Acabamento" {% if form.formato.value == "Acabamento" %}selected{% endif %}>Acabamento</option>
                     <option value="Impressão" {% if form.formato.value == "Impressão" %}selected{% endif %}>Impressão</option>
-                    <option value="Expedição" {% if form.formato.value == "Expedição" %}selected{% endif %}>Expedição</option>
-                    <option value="Limpeza" {% if form.formato.value == "Limpeza" %}selected{% endif %}>Limpeza</option>
+                    {% comment %} <option value="Expedição" {% if form.formato.value == "Expedição" %}selected{% endif %}>Expedição</option>
+                    <option value="Limpeza" {% if form.formato.value == "Limpeza" %}selected{% endif %}>Limpeza</option> {% endcomment %}
                     <option value="TintaTonner" {% if form.formato.value == "TintaTonner" %}selected{% endif %}>TintaTonner</option>
-                    <option value="Escritório" {% if form.formato.value == "Escritório" %}selected{% endif %}>Escritório</option>
-                    <option value="Mercado" {% if form.formato.value == "Mercado" %}selected{% endif %}>Mercado</option>
+                    {% comment %} <option value="Escritório" {% if form.formato.value == "Escritório" %}selected{% endif %}>Escritório</option> {% endcomment %}
+                    {% comment %} <option value="Mercado" {% if form.formato.value == "Mercado" %}selected{% endif %}>Mercado</option> {% endcomment %}
                 </select>
             </div>
 
