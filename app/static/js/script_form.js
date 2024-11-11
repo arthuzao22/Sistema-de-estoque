@@ -1,20 +1,9 @@
-
-// Função para exibir o spinner de carregamento
-function showLoading() {
-    document.getElementById('loading').style.display = 'flex';
+  // Função para exibir o spinner ao enviar o formulário
+  function showLoadingSpinner() {
+    document.getElementById('loading-spinner').style.display = 'block';
+    document.querySelector('.card').style.display = 'none';  // Esconde o card de login
+    document.querySelector('button[type="submit"]').disabled = true;  // Desabilita o botão de submit
 }
-
-// Função para ocultar o spinner de carregamento
-function hideLoading() {
-    document.getElementById('loading').style.display = 'none';
-}
-
-// Adiciona o evento de submissão do formulário
-document.querySelector('form').addEventListener('submit', function (event) {
-    // Exibe o spinner de carregamento
-    showLoading();
-});
-
 
 
 function atualizaTipo() {

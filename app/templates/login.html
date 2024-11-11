@@ -8,14 +8,17 @@
     <title>Login</title>
     <!-- Link para o Bootstrap 5.0 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/style_login.css' %}">
 </head>
-<body>
+<body class="bg-light">
 
-<div class="container d-flex justify-content-center align-items-center vh-100 ">
-    <div class="card login-card p-4">
+  <!-- Container principal para centralizar o conteúdo -->
+  <div class="d-flex justify-content-center align-items-center vh-100">
+
+    <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
         <h2 class="text-center mb-4">Login</h2>
-        <form action="{% url 'login' %}" method="POST">
+
+        <form id="login-form" action="{% url 'login' %}" method="POST" onsubmit="showLoadingSpinner()">
             {% csrf_token %}
             
             <div class="mb-3">
@@ -31,33 +34,36 @@
             <button type="submit" class="btn btn-primary w-100">Entrar</button>
         </form>
     </div>
-</div>
+  </div>
 
-{% if messages %}
-  <!-- Modal -->
-  <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-       aria-labelledby="staticBackdropLabel" aria-hidden="true" id="alert">
+  <!-- Spinner de loading que será exibido ao enviar o formulário -->
+  <div id="loading-spinner" class="position-fixed top-50 start-50 translate-middle" style="display: none;">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Modal de mensagens -->
+  {% if messages %}
+  <div class="modal fade" id="alert" tabindex="-1" aria-labelledby="alertLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Atenção</h5>
+          <h5 class="modal-title" id="alertLabel">Atenção</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <span id="alert-message"></span>
         </div>
         <div class="modal-footer">
-          <button onclick="loading-btn()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="loading" style="display: none;">
-    <div class="spinner"></div>
-  </div>
-
   <script>
+      // Exibe o modal com mensagens, se houver
       window.onload = function() {
           var myModal = new bootstrap.Modal(document.getElementById('alert'));
           var alertMessage = document.getElementById('alert-message');
@@ -67,8 +73,8 @@
           {% endfor %}
       }
   </script>
-{% endif %}
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+  {% endif %}
+  <script src="{% static 'js/script_login.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
