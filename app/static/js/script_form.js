@@ -1,5 +1,5 @@
-  // Função para exibir o spinner ao enviar o formulário
-  function showLoadingSpinner() {
+// Função para exibir o spinner ao enviar o formulário
+function showLoadingSpinner() {
     document.getElementById('loading-spinner').style.display = 'block';
     document.querySelector('.card').style.display = 'none'; 
     document.querySelector('button[type="submit"]').disabled = true; 
@@ -92,7 +92,7 @@ const subcategorias = {
         'A4 COUCHÊ 170g', 'A3 COUCHÊ 170g', 'A4 COUCHÊ 240g', 'A3 COUCHÊ 240g', 
         'A4 COUCHÊ 250g', 'A3 COUCHÊ 250g', 'A3 Adesivo Colacril 173g', 
         'A3 Adesivo Colacril 190g', 'A3 Cartão Triplex 300g', 'A3 Duo Design 300g', 
-        'ADESIVO FOSCO'
+        'ADESIVO FOSCO','A3 OFFSSET 75G','A4 OFFSSET 75G','A3 OFFSSET 90G','A4 OFFSSET 90G'
     ],
     TintaTonner: [
         'KONICA AMARELO', 'KONICA AZUL', 'KONICA MAGENTA', 'KONICA PRETO', 'PHASER 7800 AMARELO', 'PHASER 7800 AZUL',

@@ -16,10 +16,8 @@ SECRET_KEY = 'django-insecure-_jjoltkqc&fmn)m2+!q!9l+@6m%b3i+#v8z98(79=tminxhyc8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS
+# RODAR NO RENDER
 ALLOWED_HOSTS = ['.onrender.com', 'localhost']
-
-# CSRF Trusted Origins
 CSRF_TRUSTED_ORIGINS = ['https://sistema-de-estoque-sq8r.onrender.com']
 
 #PARA RODAR LOCALMENTE

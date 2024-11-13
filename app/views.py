@@ -96,8 +96,6 @@ def form(request):
 @login_required(login_url='/login/')  # Redireciona para a página de login se não estiver logado
 def create(request):
     try:
-        time.sleep(1)  # Adiciona 1 segundo de atraso
-
         form = EstoqueForm(request.POST or None)
         if form.is_valid():
             form.save()
@@ -105,7 +103,7 @@ def create(request):
             return redirect('form')
         else:
             messages.error(request, 'Erro ao salvar o estoque. Verifique os dados.')
-
+        
         data = {'form': form}
         return render(request, 'form.html', data)
     except Exception as e:
