@@ -107,7 +107,6 @@ const subcategorias = {
     // Expedição: ['Caixas', 'Paletes'],
     // Limpeza: ['Detergentes', 'Desinfetantes'],
     // Escritório: ['Papelaria', 'Mobiliário'],
-    // Mercado: ['Alimentos', 'Bebidas']
 };
 
 // Função para atualizar as subcategorias com base no formato selecionado

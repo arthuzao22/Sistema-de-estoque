@@ -17,12 +17,12 @@ SECRET_KEY = 'django-insecure-_jjoltkqc&fmn)m2+!q!9l+@6m%b3i+#v8z98(79=tminxhyc8
 DEBUG = True
 
 # RODAR NO RENDER
-ALLOWED_HOSTS = ['.onrender.com', 'localhost']
-CSRF_TRUSTED_ORIGINS = ['https://sistema-de-estoque-sq8r.onrender.com']
+#ALLOWED_HOSTS = ['.onrender.com', 'localhost']
+#CSRF_TRUSTED_ORIGINS = ['https://sistema-de-estoque-sq8r.onrender.com']
 
 #PARA RODAR LOCALMENTE
-#ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-#CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'http://localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'http://localhost']
 
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
