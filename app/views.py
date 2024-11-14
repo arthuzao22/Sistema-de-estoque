@@ -214,6 +214,8 @@ def calcular_qtde_placas(row):
             return (100 * 9) * qtde
         elif material == "Duo Design 300g" and formato == "660x960":
             return (150 * 9) * qtde
+        elif material == "ADESIVO FOSCO" and formato == "660x960":
+            return qtde * 900
     return 0
 
 def calcular_qtde_caixas(row):
