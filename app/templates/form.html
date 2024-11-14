@@ -55,6 +55,18 @@
         <div class="card">
           <form action="{% if form.instance.pk %}/update/{{ form.instance.pk }}/{% else %}/create/{% endif %}" method="POST" onsubmit="showLoadingSpinner()">
               {% csrf_token %}
+
+              <div class="form-group">
+                <label for="folha">Empresa:</label>
+                <select id="folha" name="folha" class="form-control">
+                    <option value="Galpao" {% if form.folha.value == 'Galpao' or not form.folha.value %}selected{% endif %}>Galpao</option>
+                    <option value="Itamar" {% if form.folha.value == 'Itamar' %}selected{% endif %}>Itamar</option>
+                    <option value="Benjamin" {% if form.folha.value == 'Benjamin' %}selected{% endif %}>Benjamin</option>
+                    <option value="online" {% if form.folha.value == 'online' %}selected{% endif %}>online</option>
+                </select>
+            </div>
+            
+
               <div class="form-group">
                   <label for="entrada_saida">Entrada/Saída:</label>
                   <select id="entrada_saida" name="entrada_saida" class="form-control">
@@ -108,14 +120,9 @@
               <div class="form-group">
                 <input type="hidden" id="nome" name="nome" class="form-control" 
                 value="{% if form.nome.value %}{{ form.nome.value }}{% else %}{{ nome_usuario }}{% endif %}">
-                       </div>
+              </div>
               
               <div id="especificacoes" class="hidden">
-                  <div class="form-group">
-                      <label for="folha">Folha:</label>
-                      <input type="text" id="folha" name="folha" class="form-control" value="{{ form.folha.value|default_if_none:'' }}">
-                  </div>
-
                   <div class="form-group">
                       <label for="formato_da_folha">Formato:</label>
                       <select id="formato_da_folha" name="formato_da_folha" class="form-control" >

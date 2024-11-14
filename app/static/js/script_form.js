@@ -56,7 +56,6 @@ function toggleEspecificacoes(tipo) {
         especificacoes.classList.remove('hidden');
     } else {
         especificacoes.classList.add('hidden');
-        document.getElementById('folha').value = 'null'; // Limpa o campo se não for "Placas"
     }
 }
 
@@ -87,12 +86,32 @@ const subcategorias = {
         'GRAMPEADOR', 'GRAMPO', 'CX 2 - 20', 'CX 2 - 25'
     ],
     Impressão: [
-        'A4 OFFSSET 120g', 'A3 OFFSSET 120g', 'A4 OFFSSET 180g', 'A3 OFFSSET 180g', 
-        'A4 COUCHÊ 90g', 'A3 COUCHÊ 90g', 'A4 COUCHÊ 115g', 'A3 COUCHÊ 115g', 
-        'A4 COUCHÊ 170g', 'A3 COUCHÊ 170g', 'A4 COUCHÊ 240g', 'A3 COUCHÊ 240g', 
-        'A4 COUCHÊ 250g', 'A3 COUCHÊ 250g', 'A3 Adesivo Colacril 173g', 
-        'A3 Adesivo Colacril 190g', 'A3 Cartão Triplex 300g', 'A3 Duo Design 300g', 
-        'ADESIVO FOSCO','A3 OFFSSET 75G','A4 OFFSSET 75G','A3 OFFSSET 90G','A4 OFFSSET 90G'
+        // PLACAS
+        'OFFSSET 120g', 
+        'OFFSSET 180g', 
+        'COUCHÊ 90g', 
+        'COUCHÊ 115g',  
+        'COUCHÊ 170g', 
+        'COUCHÊ 240g', 
+        'COUCHÊ 250g',  
+        'Adesivo Colacril 173g', 
+        'Adesivo Colacril 190g', 
+        'Cartão Triplex 300g', 
+        'Duo Design 300g',
+        'ADESIVO FOSCO',
+
+        // CAIXA
+        'A3 OFFSSET 75G',
+        'A4 OFFSSET 75G',
+        'A3 OFFSSET 90G',
+        'A4 OFFSSET 90G',
+
+        'A4 OFFSSET 75g AMARELO',
+        'A4 OFFSSET 75g AZUL',
+        'A4 OFFSSET 75g MARFIM',
+        'A4 OFFSSET 75g ROSA',
+        'A4 OFFSSET 75g VERDE',
+
     ],
     TintaTonner: [
         'KONICA AMARELO', 'KONICA AZUL', 'KONICA MAGENTA', 'KONICA PRETO', 'PHASER 7800 AMARELO', 'PHASER 7800 AZUL',

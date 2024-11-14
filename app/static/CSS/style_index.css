@@ -6,3 +6,8 @@ body {
     font-family: Arial, sans-serif;
 
 }
+.txt-central-estoque{
+    padding: 20px;
+}
+
+.form-index{display: flex;}

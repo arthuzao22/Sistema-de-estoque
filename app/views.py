@@ -25,6 +25,9 @@ from googleapiclient.http import MediaFileUpload
 def home(request):
     tipo_de_material = request.GET.get('tipo_de_material')
     entrada_saida = request.GET.get('entrada_saida')
+    data = request.GET.get('data')
+    
+    print(data)
 
     try:
         estoques = Estoque.objects.all().values()
@@ -57,6 +60,13 @@ def home(request):
         # Filtra pela entrada ou saída, se fornecido
         if entrada_saida:
             df = df[df['entrada_saida'].str.contains(entrada_saida, case=False, na=False)]
+            
+        # Filtra pela data, se fornecido
+        if data:
+            df['data'] = pd.to_datetime(df['data'], errors='coerce').dt.date
+            data_filtrada = pd.to_datetime(data, errors='coerce').date()
+            df = df[df['data'] == data_filtrada]
+
 
         # Ordena os resultados pelo 'id' em ordem decrescente
         df = df.sort_values(by='id', ascending=False)
@@ -173,58 +183,36 @@ def calcular_qtde_placas(row):
         formato = row['formato_da_folha']
         qtde = int(row['qtde'])
         
-        #A3
-        if material == 'A3 OFFSSET 120g' and formato == '640x880':
-            return ((250 / 2) * 4) * qtde
-        elif material == "A3 OFFSSET 120g" and formato == "660x960":
-            return ((250 / 2) * 4) * qtde
-        elif material == "A3 OFFSSET 180g" and formato == "640x880":
-            return ((250 / 2) * 4) * qtde
-        elif material == "A3 COUCHÊ 90g" and formato == "660x960":
-            return ((250 / 2) * 4) * qtde
-        elif material == "A3 COUCHÊ 115g" and formato == "660x960":
-            return ((250 / 2) * 4) * qtde
-        elif material == "A3 COUCHÊ 170g" and formato == "660x960":
-            return ((250 / 2) * 4) * qtde
-        elif material == "A3 COUCHÊ 240g" and formato == "660x960":
-            return ((150 / 2) * 4) * qtde
-        elif material == "A3 COUCHÊ 250g" and formato == "660x960":
-            return ((125 / 2) * 4) * qtde
-        elif material == "A3 Adesivo Colacril 173g" and formato == "660x960":
-            return ((100 / 2) * 4) * qtde
-        elif material == "A3 Adesivo Colacril 190g" and formato == "660x960":
-            return ((100 / 2) * 4) * qtde
-        elif material == "A3 Cartão Triplex 300g" and formato == "660x960":
-            return ((100 / 2) * 4) * qtde
-        elif material == "A3 Duo Design 300g" and formato == "660x960":
-            return ((150 / 2) * 4) * qtde
-        elif material == "ADESIVO FOSCO" and formato == "660x960":
-            return qtde * 900
+        if material == 'OFFSSET 120g' and formato == '640x880':
+            return (250 * 8) * qtde
+        elif material == "OFFSSET 120g" and formato == "660x960":
+            return (250 * 9) * qtde
         
-        # A4
-        if material == 'A4 OFFSSET 120g' and formato == '640x880':
+        elif material == "OFFSSET 180g" and formato == "640x880":
             return (250 * 8) * qtde
-        elif material == "A4 OFFSSET 120g" and formato == "660x960":
+        
+        elif material == "COUCHÊ 90g" and formato == "660x960":
             return (250 * 9) * qtde
-        elif material == "A4 OFFSSET 180g" and formato == "640x880":
-            return (250 * 8) * qtde
-        elif material == "A4 COUCHÊ 90g" and formato == "660x960":
+        
+        elif material == "COUCHÊ 115g" and formato == "660x960":
             return (250 * 9) * qtde
-        elif material == "A4 COUCHÊ 115g" and formato == "660x960":
+        
+        elif material == "COUCHÊ 170g" and formato == "660x960":
             return (250 * 9) * qtde
-        elif material == "A4 COUCHÊ 170g" and formato == "660x960":
-            return (250 * 9) * qtde
-        elif material == "A4 COUCHÊ 240g" and formato == "660x960":
+        
+        elif material == "COUCHÊ 240g" and formato == "660x960":
             return (150 * 9) * qtde
-        elif material == "A4 COUCHÊ 250g" and formato == "660x960":
+        
+        elif material == "COUCHÊ 250g" and formato == "660x960":
             return (125 * 9) * qtde
-        elif material == "A3 Adesivo Colacril 173g" and formato == "660x960":
+        
+        elif material == "Adesivo Colacril 173g" and formato == "660x960":
             return (100 * 9) * qtde
-        elif material == "A3 Adesivo Colacril 190g" and formato == "660x960":
+        elif material == "Adesivo Colacril 190g" and formato == "660x960":
             return (100 * 9) * qtde
-        elif material == "A3 Cartão Triplex 300g" and formato == "660x960":
+        elif material == "Cartão Triplex 300g" and formato == "660x960":
             return (100 * 9) * qtde
-        elif material == "A3 Duo Design 300g" and formato == "660x960":
+        elif material == "Duo Design 300g" and formato == "660x960":
             return (150 * 9) * qtde
     return 0
 
