@@ -44,101 +44,96 @@
     </nav>
 
     <div class="container mt-4">
-        
-        
         <div class="row mb-4">
-        <!-- Conteúdo principal -->
-            <div class="table-responsive">
-                <table class="table table-striped-columns">
-                    <tr>
-                        <th>
-                            <h1 class="txt-central-estoque">
-                                <center>
-                                    Registro de dados gerais
-                                </center>
-                            </h1>
-                            <!-- Filtro de Dados -->
-                            <div class="row mb-4">
-                                <form class="form-index row g-2" action="{% url 'home' %}" method="get">
-                                    {% csrf_token %}
-                                    
-                                    <div class="col-12 col-md-3">
-                                        <input type="text" class="form-control" placeholder="Filtrar por nome do produto" id="filterName" name="tipo_de_material">
-                                    </div>
-                                    
-                                    <div class="col-6 col-md-3">
-                                        <select class="form-select" id="filterType" name="entrada_saida">
-                                            <option value="">Tipo</option>
-                                            <option value="Entrada">Entrada</option>
-                                            <option value="Saida">Saida</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="col-6 col-md-3">
-                                        <input type="date" class="form-control" id="filterDate" name="data">
-                                    </div>
-                                    
-                                    <div class="col-12 col-md-3">
-                                        <input class="btn btn-outline-primary btn w-100" type="submit" value="Aplicar Filtros">
-                                    </div>
-                                </form>
-                            </div>
-                        </th>
-                    </tr>
-                  </table>
-                <table class="table table-bordered table-hover">
-                    <thead class="table-light text-center">
-                        <tr>
-                            <th scope="col">##</th>
-                            <th scope="col">Entrada/Saída</th>
-                            <th scope="col">Data</th>
-                            <th scope="col">Tipo</th>
-                            <th scope="col">Formato</th>
-                            <th scope="col">Nome</th>
-                            <th scope="col">Material</th>
-                            <th scope="col">Formato</th>
-                            <th scope="col">QTDE</th>
-                            <th scope="col">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-center">
-                        {% for dbs in page_obj %}
+            <h1 class="txt-central-estoque">
+                <center>
+                    Registro de dados gerais
+                </center>
+            </h1>
+            <!-- Conteúdo principal -->
+            <div>
+                <!-- Filtro de Dados -->
+                <div class="row mb-4">
+                    <form class="form-index row g-2" action="{% url 'home' %}" method="get">
+                        {% csrf_token %}
+                        
+                        <div class="col-12 col-md-3">
+                            <input type="text" class="form-control" placeholder="Filtrar por nome do produto" id="filterName" name="tipo_de_material">
+                        </div>
+                        
+                        <div class="col-6 col-md-3">
+                            <select class="form-select" id="filterType" name="entrada_saida">
+                                <option value="">Tipo</option>
+                                <option value="Entrada">Entrada</option>
+                                <option value="Saida">Saida</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-6 col-md-3">
+                            <input type="date" class="form-control" id="filterDate" name="data">
+                        </div>
+                        
+                        <div class="col-12 col-md-3">
+                            <input class="btn btn-outline-primary btn w-100" type="submit" value="Aplicar Filtros">
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Tabela Responsiva -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-light text-center">
                             <tr>
-                                <th>{{ dbs.id }}</th>
-                                <td>{{ dbs.entrada_saida }}</td>
-                                <td>{{ dbs.data }}</td>
-                                <td>
-                                    <strong>
-                                        {{ dbs.qtde }} {{ dbs.tipo }}
-                                    </strong>
-                                </td>
-                                <td>{{ dbs.formato }}</td>
-                                <td>{{ dbs.nome }}</td>
-                                <td>{{ dbs.tipo_de_material }}</td>
-                                <td>
-                                    {% if dbs.formato_da_folha == 'null' or dbs.formato_da_folha == 'nan' or not dbs.formato_da_folha %}
-                                        N/A
-                                    {% else %}
-                                        {{ dbs.formato_da_folha }}
-                                    {% endif %}
-                                </td>
-                                
-                                <td id="qtde_alert">
-                                    <strong>
-                                        {{ dbs.qtde_final }}
-                                    </strong>
-                                </td>
-                                <td>
-                                    <a href="edit/{{ dbs.id }}" class="btn btn-outline-primary btn-sm">Editar</a>
-                                    <button class="btn btn-outline-danger btn-sm" onclick="confirmarExclusao({{ dbs.id }})">Deletar</button>
-                                </td>
+                                <th scope="col">##</th>
+                                <th scope="col">Entrada/Saída</th>
+                                <th scope="col">Data</th>
+                                <th scope="col">Tipo</th>
+                                <th scope="col">Formato</th>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Material</th>
+                                <th scope="col">Formato</th>
+                                <th scope="col">QTDE</th>
+                                <th scope="col">Ações</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="text-center">
+                            {% for dbs in page_obj %}
+                                <tr>
+                                    <th>{{ dbs.id }}</th>
+                                    <td>{{ dbs.entrada_saida }}</td>
+                                    <td>{{ dbs.data }}</td>
+                                    <td>
+                                        <strong>
+                                            {{ dbs.qtde }} {{ dbs.tipo }}
+                                        </strong>
+                                    </td>
+                                    <td>{{ dbs.formato }}</td>
+                                    <td>{{ dbs.nome }}</td>
+                                    <td>{{ dbs.tipo_de_material }}</td>
+                                    <td>
+                                        {% if dbs.formato_da_folha == 'null' or dbs.formato_da_folha == 'nan' or not dbs.formato_da_folha %}
+                                            N/A
+                                        {% else %}
+                                            {{ dbs.formato_da_folha }}
+                                        {% endif %}
+                                    </td>
+                                    
+                                    <td id="qtde_alert">
+                                        <strong>
+                                            {{ dbs.qtde_final }}
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <a href="edit/{{ dbs.id }}" class="btn btn-outline-primary btn-sm">Editar</a>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="confirmarExclusao({{ dbs.id }})">Deletar</button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-        
 
         <!-- Paginação -->
         <nav aria-label="Navegação da tabela de estoque" class="mt-3">

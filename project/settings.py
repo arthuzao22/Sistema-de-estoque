@@ -76,9 +76,14 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'Sistema-de-estoque',  # Nome do banco de dados
+        'USER': 'Arthur',  # Não é necessário um usuário
+        'PASSWORD': '220108',  # Não é necessário uma senha
+        'HOST': 'cby0ni6znk.sqlite.cloud',  # Host do SQLite Cloud
+        'PORT': '8860',  # Porta do SQLite Cloud
     }
 }
+
 
 
 # Password validation
