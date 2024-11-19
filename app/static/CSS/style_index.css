@@ -4,7 +4,7 @@
 }
 body {
     font-family: Arial, sans-serif;
-
+    background-color: #f4f4f9; /* Cor de fundo suave */
 }
 .txt-central-estoque{
     padding: 20px;

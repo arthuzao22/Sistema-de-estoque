@@ -19,6 +19,18 @@ document.querySelectorAll('#qtde_alert').forEach(td => {
     }
 });
 
+document.querySelectorAll('#entrada_saida_alert').forEach(td => {
+    if (td.innerText == "Saida") { // Verifica se o conteúdo do td é "0"
+        td.style.background = '#ff666665'; // Altera o background para vermelho
+    }
+});
+
+document.querySelectorAll('#entrada_saida_alert').forEach(td => {
+    if (td.innerText == "Entrada") { // Verifica se o conteúdo do td é "0"
+        td.style.background = 'rgba(153, 255, 0, 0.197)'; // Altera o background para vermelho
+    }
+});
+
 const formatter = new Intl.DateTimeFormat('pt-BR', {
     day: '2-digit',
     month: '2-digit',

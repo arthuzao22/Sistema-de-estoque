@@ -103,7 +103,7 @@
                             {% for dbs in page_obj %}
                                 <tr>
                                     <th>{{ dbs.id }}</th>
-                                    <td>{{ dbs.entrada_saida }}</td>
+                                    <td id="entrada_saida_alert">{{ dbs.entrada_saida }}</td>
                                     <td id="data-{{ dbs.id }}">{{ dbs.data }}</td>
                         
                                     <td>

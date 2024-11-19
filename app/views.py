@@ -15,7 +15,6 @@ from app.forms import EstoqueForm
 from app.models import Estoque
 from datetime import datetime
 
-
 from git import Repo
 
 from googleapiclient.discovery import build
@@ -30,6 +29,7 @@ def home(request):
     tipo_de_material = request.GET.get('tipo_de_material')
     entrada_saida = request.GET.get('entrada_saida')
     data = request.GET.get('data')
+    print("data", entrada_saida)
 
     try:
         conn = get_connection()
@@ -330,7 +330,7 @@ def dashboard(request):
 
         # Dados para o gráfico de entradas e saídas por data
         entradas_por_data = df[df['entrada_saida'] == 'entrada'].groupby('data')['qtde'].count().reset_index()
-        saidas_por_data = df[df['entrada_saida'] == 'saída'].groupby('data')['qtde'].count().reset_index()
+        saidas_por_data = df[df['entrada_saida'] == 'saida'].groupby('data')['qtde'].count().reset_index()
         
         # Preparar labels e datasets para o gráfico
         labels = entradas_por_data['data'].dt.strftime('%Y-%m-%d').tolist()
