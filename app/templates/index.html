@@ -38,6 +38,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/estoque">Estoque</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                      </li>
                 </ul>
             </div>
         </div>
@@ -101,7 +104,8 @@
                                 <tr>
                                     <th>{{ dbs.id }}</th>
                                     <td>{{ dbs.entrada_saida }}</td>
-                                    <td>{{ dbs.data }}</td>
+                                    <td id="data-{{ dbs.id }}">{{ dbs.data }}</td>
+                        
                                     <td>
                                         <strong>
                                             {{ dbs.qtde }} {{ dbs.tipo }}
@@ -124,7 +128,7 @@
                                         </strong>
                                     </td>
                                     <td>
-                                        <a href="edit/{{ dbs.id }}" class="btn btn-outline-primary btn-sm">Editar</a>
+                                        {% comment %} <a href="edit/{{ dbs.id }}" class="btn btn-outline-primary btn-sm">Editar</a> {% endcomment %}
                                         <button class="btn btn-outline-danger btn-sm" onclick="confirmarExclusao({{ dbs.id }})">Deletar</button>
                                     </td>
                                 </tr>
@@ -157,6 +161,43 @@
         </nav>
     </div>
 
+    {% if messages %}
+
+    <!-- Modal -->
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true" id="alert">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Atenção</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <span id="alert-message"></span>
+          </div>
+          <div class="modal-footer">
+            <button onclick="loading-btn()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  
+    <script>
+      // Quando a página carregar
+      window.onload = function() {
+        var myModal = new bootstrap.Modal(document.getElementById('alert'));
+        var alertMessage = document.getElementById('alert-message'); // Corrigido aqui
+        var form = document.querySelector('form');
+        var loadingSpinner = document.getElementById('loading-spinner'); // Spinner de loading
+  
+        // Exibir mensagens após o envio
+        {% for message in messages %}
+            alertMessage.innerText = '{{ message }}'; // Corrigido aqui
+            myModal.show();
+        {% endfor %}
+      }
+    {% endif %}
     <footer class="footer mt-4 text-center">
         <p>&copy; 2024 CDG Estoque. Todos os direitos reservados.</p>
     </footer>

@@ -34,6 +34,9 @@
           <li class="nav-item">
             <a class="nav-link" href="/estoque">Estoque</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+          </li>
           {% if id == 1 %}
           <li class="nav-item">
               <a class="nav-link" href="{% url 'register_view' %}">Administrador</a>
@@ -53,8 +56,9 @@
         <div class="col-12 text-center mb-4">
             <h1 class="display-6">Bem-vindo, {{ nome_usuario }}!</h1>
         </div>
+
         <div class="row">
-            <div class="col-12 col-md-4"> <!-- Ajuste responsivo -->
+            <div class="col-12 col-md-3"> <!-- Ajuste responsivo -->
                 <a href="form/">
                     <div class="card mb-3">
                         <img src="{% static 'IMG/input.png' %}" class="card-img-top" alt="Estoque">
@@ -66,7 +70,7 @@
                     </div>
                 </a>
             </div>
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
                 <a href="home/">
                     <div class="card mb-3">
                         <img src="{% static 'IMG/to-do-list.png' %}" class="card-img-top" alt="Estoque">
@@ -78,13 +82,25 @@
                     </div>
                 </a>
             </div>
-            <div class="col-12 col-md-4"> <!-- Ajuste responsivo -->
+            <div class="col-12 col-md-3"> <!-- Ajuste responsivo -->
                 <a href="estoque/">
                     <div class="card mb-3">
                         <img src="{% static 'IMG/inventory.png' %}" class="card-img-top" alt="Estoque">
                         <div class="card-body">
                             <h5 class="card-title">Estoque</h5>
                             <p class="card-text">Gerencie seu estoque de maneira eficiente.</p>
+                            <p class="card-text"><small class="text-muted">Última atualização 3 mins atrás</small></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-md-3"> <!-- Ajuste responsivo -->
+                <a href="dashboard/">
+                    <div class="card mb-3">
+                        <img src="{% static 'IMG/dashboard.png' %}" class="card-img-top" alt="Dashboard">
+                        <div class="card-body">
+                            <h5 class="card-title">Dashboard</h5>
+                            <p class="card-text">Gerencie seu Dashboard de maneira eficiente.</p>
                             <p class="card-text"><small class="text-muted">Última atualização 3 mins atrás</small></p>
                         </div>
                     </div>

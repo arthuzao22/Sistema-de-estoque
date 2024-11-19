@@ -35,6 +35,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/estoque">Estoque</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                      </li>
                 </ul>
             </div>
         </div>
@@ -65,26 +68,6 @@
                             <input type="text" id="cargo" name="cargo" class="form-control" placeholder="Digite seu cargo" required>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Registrar</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Segunda coluna: Download do Banco de Dados -->
-            <div class="col-md-6 col-lg-3">
-                <div class="card p-4 text-center">
-                    <h2 class="text-center mb-4">Banco de Dados</h2>
-                    <a class="btn btn-primary w-100" href="{% url 'download_database' %}">Baixar Banco de Dados</a>
-                </div>
-            </div>
-
-            <!-- Terceira coluna: Upload de Arquivo Excel -->
-            <div class="col-md-6 col-lg-3">
-                <div class="card p-4">
-                    <h2 class="text-center mb-4">Upload Excel</h2>
-                    <form action="{% url 'subir_para_base_de_dados' %}" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <input type="file" name="excelFile" id="excelFile" accept=".xlsx, .xls" class="form-control mb-3">
-                        <button class="btn btn-primary w-100" type="submit">Subir base de dados</button>
                     </form>
                 </div>
             </div>

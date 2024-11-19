@@ -18,3 +18,17 @@ document.querySelectorAll('#qtde_alert').forEach(td => {
         td.style.background = '#FF6666'; // Altera o background para vermelho
     }
 });
+
+const formatter = new Intl.DateTimeFormat('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+});
+
+document.querySelectorAll("td[id^='data-']").forEach(td => {
+    const rawDate = td.textContent.trim();
+    const date = new Date(rawDate);
+    if (!isNaN(date)) {
+        td.textContent = formatter.format(date);
+    }
+});
