@@ -1,65 +1,198 @@
+/* Estilo geral do body */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9; /* Cor de fundo suave */
+    background-color: #f4f4f9; /* Fundo suave */
 }
+
+/* Títulos principais */
 h1 {
     color: #333;
-}
-
-/* Botão de busca */
-.form-control {
-    border: 1px solid #ffffff;
-    background-color: #f1f3f4;
-    color: #000;
-}
-
-.btn-outline-success {
-    color: #ffffff;
-    border-color: #ffffff;
-}
-
-.btn-outline-success:hover {
-    background-color: #34a853;
-    color: #ffffff;
-    border-color: #34a853;
-}
-
-
-table {
-    width: 100%;
-    border-collapse: collapse;
+    font-weight: bold;
     margin-bottom: 20px;
 }
-th, td {
+
+/* Cartões (cards) */
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    margin-bottom: 20px;
+}
+.cabecalho-table{
+    color: black;
+}
+
+/* Tabelas */
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+.th{
+    color: black;
+}
+
+.table thead {
+    background-color: #e9ecef; /* Cor do cabeçalho */
+    font-weight: bold;
+}
+
+.table th, .table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
 }
-th {
-    background-color: #f2f2f2;
+
+.table th {
+    background-color: #f2f2f2; /* Cor do cabeçalho da tabela */
 }
-tr:nth-child(even) {
-    background-color: #f9f9f9;
+
+.table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Alternância de cores */
 }
-tr:hover {
-    background-color: #f1f1f1;
+
+.table tr:hover {
+    background-color: #f1f1f1; /* Efeito hover */
 }
+
+/* Indicador de ausência de dados */
 .no-data {
-    color: #a00; /* Vermelho para indicar ausência de dados */
+    color: #a00; /* Vermelho para destaque */
     font-style: italic;
 }
 
-.navbar-brand{
-    width: 100px;
+/* Botões de filtro */
+.btn-filter {
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    padding: 0.3rem 0.8rem;
+    border: none;
+    cursor: pointer;
 }
 
-.select_filter{
+.btn-filter:hover {
+    background-color: #0056b3; /* Azul mais escuro ao passar o mouse */
+}
+
+.select_filter {
     width: 90px;
     margin-left: 10px;
-
+    border-radius: 5px;
+    padding: 5px;
 }
-.button_filter{
+
+.button_filter {
     background-color: transparent;
-    border-color: transparent;
+    border: none;
+    cursor: pointer;
 }
 
+/* Menu lateral fixo */
+.sidebar {
+    height: 100vh;
+    width: 240px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #343a40; /* Cinza escuro */
+    color: white;
+    padding-top: 1rem;
+    overflow-y: auto;
+    transition: all 0.3s ease-in-out;
+    z-index: 1030;
+}
+
+.sidebar .logo {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.sidebar .logo img {
+    max-height: 50px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    padding: 0.8rem 1rem;
+    display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #495057; /* Cinza mais claro ao passar o mouse */
+}
+
+/* Conteúdo principal */
+.main-content {
+    margin-left: 240px;
+    padding: 2rem;
+    transition: margin-left 0.3s ease-in-out;
+}
+
+/* Ajustes para telas menores */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 200px;
+        transform: translateX(-100%);
+    }
+
+    .sidebar.show {
+        transform: translateX(0); /* Mostra o menu lateral */
+    }
+
+
+    /* Ajustar as tabelas */
+
+
+    .table th, .table td {
+        padding: 6px; /* Ajusta o padding para um valor mais compacto */
+    }
+
+    /* Ajustar o cabeçalho da tabela */
+    .table thead {
+        background-color: #f8f9fa; /* Cor suave para cabeçalho */
+    }
+    
+    .cabecalho-table {
+        font-size: 0.9rem; /* Reduz o tamanho da fonte para dispositivos menores */
+    }
+
+    /* Ajustar a barra lateral */
+    .sidebar {
+        width: 200px;
+    }
+
+    /* Ajustar o conteúdo principal */
+    .main-content {
+        margin-left: 0; /* Remove a margem da lateral */
+        padding: 1rem; /* Diminui o padding para dispositivos menores */
+    }
+
+}
+
+/* Overlay para escurecer o fundo */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+    z-index: 1029;
+    display: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.overlay.show {
+    display: block; /* Mostra o overlay */
+}
+
+/* Marcações adicionais (Navbar Brand) */
+.navbar-brand {
+    width: 100px;
+}

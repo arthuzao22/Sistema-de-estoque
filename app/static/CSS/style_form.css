@@ -34,9 +34,9 @@ body {
     padding: 15px 0;
 }
 h1 {
-    color: #343a40;
-    font-family: 'Arial', sans-serif;
-    margin-bottom: 30px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 .form-group {
     margin-bottom: 15px;
@@ -66,5 +66,87 @@ h1 {
 }
 
 .navbar-brand{
+    width: 100px;
+}
+
+/* Menu lateral fixo */
+.sidebar {
+    height: 100vh;
+    width: 240px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #343a40; /* Cinza escuro */
+    color: white;
+    padding-top: 1rem;
+    overflow-y: auto;
+    transition: all 0.3s ease-in-out;
+    z-index: 1030;
+}
+
+.sidebar .logo {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.sidebar .logo img {
+    max-height: 50px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    padding: 0.8rem 1rem;
+    display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #495057; /* Cinza mais claro ao passar o mouse */
+}
+
+/* Conteúdo principal */
+.main-content {
+    margin-left: 240px;
+    padding: 2rem;
+    transition: margin-left 0.3s ease-in-out;
+}
+
+/* Ajustes para telas menores */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 240px;
+        transform: translateX(-100%);
+    }
+
+    .sidebar.show {
+        transform: translateX(0); /* Mostra o menu lateral */
+    }
+
+    .main-content {
+        margin-left: 0; /* Remove a margem */
+    }
+}
+
+/* Overlay para escurecer o fundo */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+    z-index: 1029;
+    display: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.overlay.show {
+    display: block; /* Mostra o overlay */
+}
+
+/* Marcações adicionais (Navbar Brand) */
+.navbar-brand {
     width: 100px;
 }
