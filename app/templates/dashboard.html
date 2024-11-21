@@ -9,63 +9,61 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'CSS/style_dashboard.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
 </head>
 <body>
-        <!-- Menu Lateral -->
-        <div class="sidebar" id="sidebar">
-            <div class="logo text-center">
-                <img src="{% static 'IMG/logo_png_site.png' %}" alt="Logo">
-            </div>
-            <hr>
-            <a href="/">
-                <i class="fas fa-home me-2"></i> <!-- Ícone de casa -->
-                Home
-            </a>
-            <a href="/form">
-                <i class="fas fa-plus-circle me-2"></i> <!-- Ícone de adicionar -->
-                Cadastro
-            </a>
-            <a href="/home">
-                <i class="fas fa-list me-2"></i> <!-- Ícone de listagem -->
-                Listagem
-            </a>
-            <a href="/estoque">
-                <i class="fas fa-boxes-stacked me-2"></i> <!-- Ícone de estoque -->
-                Estoque
-            </a>
-            <a href="/dashboard">
-                <i class="fas fa-chart-line me-2"></i> <!-- Ícone de gráfico -->
-                Dashboard
-            </a>
-            {% if id == 1 %}
-                <a href="{% url 'register_view' %}">
-                    <i class="fas fa-user-shield me-2"></i> <!-- Ícone de administrador -->
-                    Administrador
-                </a>
-            {% endif %}
+    <!-- Menu Lateral -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo text-center">
+            <img src="{% static 'IMG/logo_png_site.png' %}" alt="Logo">
         </div>
+        <hr>
+        <a href="/">
+            <i class="fas fa-home me-2"></i> <!-- Ícone de casa -->
+            Home
+        </a>
+        <a href="/form">
+            <i class="fas fa-plus-circle me-2"></i> <!-- Ícone de adicionar -->
+            Cadastro
+        </a>
+        <a href="/home">
+            <i class="fas fa-list me-2"></i> <!-- Ícone de listagem -->
+            Listagem
+        </a>
+        <a href="/estoque">
+            <i class="fas fa-boxes-stacked me-2"></i> <!-- Ícone de estoque -->
+            Estoque
+        </a>
+        <a href="/dashboard">
+            <i class="fas fa-chart-line me-2"></i> <!-- Ícone de gráfico -->
+            Dashboard
+        </a>
+        {% if id == 1 %}
+            <a href="{% url 'register_view' %}">
+                <i class="fas fa-user-shield me-2"></i> <!-- Ícone de administrador -->
+                Administrador
+            </a>
+        {% endif %}
+    </div>
     
-        <!-- Overlay para fundo escurecido -->
-        <div class="overlay" id="overlay"></div>
+    <!-- Overlay para fundo escurecido -->
+    <div class="overlay" id="overlay"></div>
     
-        <!-- Barra de Navegação para Mobile -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-lg-none">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button" id="menuToggle" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    <!-- Barra de Navegação para Mobile -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-lg-none">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" id="menuToggle" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <a class="navbar-brand" href="#">CDG</a>
-            </div>
-        </nav>
+        </div>
+    </nav>
 
-<div class="container mt-4 main-content">
+    <div class="container mt-4 main-content">
     <div class="col-12 text-center mb-4">
         <h1>Dashboard</h1>
     </div>
-
     <!-- KPIs Section -->
-    <div class="row text-center">
+    <div class="row justify-content-center text-center">
         <div class="col-sm-6 col-md-3 mb-3">
             <div class="card h-100">
                 <div class="card-body">
@@ -102,73 +100,83 @@
     <hr>
 
     <!-- Charts Section -->
-    <div class="row mt-4">
-        <div class="col-12 col-md-8 col-sm-12 mb-3">
-            <canvas id="chartEntradasSaidas"></canvas>
+    <div class="row justify-content-center mt-4">
+        <!-- Gráfico de Entradas e Saídas -->
+        <div class="col-12 col-md-8 col-lg-8 col-xl-8 col-xxl-8 mb-3 d-flex justify-content-center">
+            <canvas id="chartEntradasSaidas" class="w-100"></canvas>
         </div>
-        <div class="col-12 col-md-4 col-sm-12 mb-3">
-            <canvas id="chartPorTipo" ></canvas>
+        <!-- Gráfico de Estoque por Tipo de Material -->
+        <div class="col-12 col-md-4 col-lg-4 col-xl-4 col-xxl-4 mb-3 d-flex justify-content-center">
+            <canvas id="chartPorTipo" class="w-100"></canvas>
         </div>
     </div>
     <hr>
-    
-
 </div>
 
-<!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{% static 'js/script_dashboard.js' %}"></script>
+    
 
-<script>
-    // Dados passados pelo template
-    const chartData = {
-        labels: {{ labels|safe }},
-        entradas: {{ entradas|safe }},
-        saidas: {{ saidas|safe }},
-        tipos: {{ tipos|safe }},
-        quantidades: {{ quantidades|safe }}
-    };
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'js/script_dashboard.js' %}"></script>
 
-    // Gráfico de Entradas e Saídas
-    const ctx1 = document.getElementById('chartEntradasSaidas').getContext('2d');
-    new Chart(ctx1, {
-        type: 'line',
-        data: {
-            labels: chartData.labels,
-            datasets: [
-                {
-                    label: 'Entradas',
-                    data: chartData.entradas,
-                    borderColor: 'green',
-                    fill: false,
-                    tension: 0.4,
-                },
-                {
-                    label: 'Saidas',
-                    data: chartData.saidas,
-                    borderColor: 'red',
-                    fill: false,
-                    tension: 0.4,
-                },
-            ],
-        },
-    });
+    <script>
+        // Dados passados pelo template
+        const chartData = {
+            labels: {{ labels|safe }},
+            entradas: {{ entradas|safe }},
+            saidas: {{ saidas|safe }},
+            tipos: {{ tipos|safe }},
+            quantidades: {{ quantidades|safe }}
+        };
 
-    // Gráfico de Estoque por Tipo de Material
-    const ctx2 = document.getElementById('chartPorTipo').getContext('2d');
-    new Chart(ctx2, {
-        type: 'pie',
-        data: {
-            labels: chartData.tipos,
-            datasets: [
-                {
-                    data: chartData.quantidades,
-                    backgroundColor: ['#007bff', '#28a745', '#dc3545', '#ffc107', '#6f42c1'],
-                },
-            ],
-        },
-    });
-</script>
+        // Gráfico de Entradas e Saídas
+        const ctx1 = document.getElementById('chartEntradasSaidas').getContext('2d');
+        new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: chartData.labels,
+                datasets: [
+                    {
+                        label: 'Entradas',
+                        data: chartData.entradas,
+                        borderColor: 'green',
+                        fill: false,
+                        tension: 0.4,
+                    },
+                    {
+                        label: 'Saidas',
+                        data: chartData.saidas,
+                        borderColor: 'red',
+                        fill: false,
+                        tension: 0.4,
+                    },
+                ],
+            },
+            options: {
+                responsive: true, // Responsividade
+                maintainAspectRatio: false, // Permite que o gráfico seja dimensionado de acordo com o contêiner
+            }
+        });
+
+        // Gráfico de Estoque por Tipo de Material
+        const ctx2 = document.getElementById('chartPorTipo').getContext('2d');
+        new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: chartData.tipos,
+                datasets: [
+                    {
+                        data: chartData.quantidades,
+                        backgroundColor: ['#007bff', '#28a745', '#dc3545', '#ffc107', '#6f42c1'],
+                    },
+                ],
+            },
+            options: {
+                responsive: true, // Responsividade
+                maintainAspectRatio: false, // Permite que o gráfico seja dimensionado de acordo com o contêiner
+            }
+        });
+    </script>
 </body>
 </html>

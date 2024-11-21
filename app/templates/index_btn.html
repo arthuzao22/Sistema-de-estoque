@@ -8,116 +8,114 @@
     <title>Inicio</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'CSS/style_index_btn.css' %}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-<body>
-  
 
 </head>
-  <!-- Menu Lateral -->
-  <div class="sidebar" id="sidebar">
-    <div class="logo text-center">
-        <img src="{% static 'IMG/logo_png_site.png' %}" alt="Logo">
-    </div>
-    <hr>
-    <a href="/">
-        <i class="fas fa-home me-2"></i> <!-- Ícone de casa -->
-        Home
-    </a>
-    <a href="/form">
-        <i class="fas fa-plus-circle me-2"></i> <!-- Ícone de adicionar -->
-        Cadastro
-    </a>
-    <a href="/home">
-        <i class="fas fa-list me-2"></i> <!-- Ícone de listagem -->
-        Listagem
-    </a>
-    <a href="/estoque">
-        <i class="fas fa-boxes-stacked me-2"></i> <!-- Ícone de estoque -->
-        Estoque
-    </a>
-    <a href="/dashboard">
-        <i class="fas fa-chart-line me-2"></i> <!-- Ícone de gráfico -->
-        Dashboard
-    </a>
-    {% if id == 1 %}
-        <a href="{% url 'register_view' %}">
-            <i class="fas fa-user-shield me-2"></i> <!-- Ícone de administrador -->
-            Administrador
-        </a>
-    {% endif %}
+ <!-- Menu Lateral -->
+ <div class="sidebar" id="sidebar">
+  <div class="logo text-center">
+      <img src="{% static 'IMG/logo_png_site.png' %}" alt="Logo">
+  </div>
+  <hr>
+  <a href="/">
+      <i class="fas fa-home me-2"></i> <!-- Ícone de casa -->
+      Home
+  </a>
+  <a href="/form">
+      <i class="fas fa-plus-circle me-2"></i> <!-- Ícone de adicionar -->
+      Cadastro
+  </a>
+  <a href="/home">
+      <i class="fas fa-list me-2"></i> <!-- Ícone de listagem -->
+      Listagem
+  </a>
+  <a href="/estoque">
+      <i class="fas fa-boxes-stacked me-2"></i> <!-- Ícone de estoque -->
+      Estoque
+  </a>
+  <a href="/dashboard">
+      <i class="fas fa-chart-line me-2"></i> <!-- Ícone de gráfico -->
+      Dashboard
+  </a>
+  {% if id == 1 %}
+      <a href="{% url 'register_view' %}">
+          <i class="fas fa-user-shield me-2"></i> <!-- Ícone de administrador -->
+          Administrador
+      </a>
+  {% endif %}
 </div>
-
 
 <!-- Overlay para fundo escurecido -->
 <div class="overlay" id="overlay"></div>
 
 <!-- Barra de Navegação para Mobile -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-lg-none">
-    <div class="container-fluid">
-        <button class="navbar-toggler" type="button" id="menuToggle" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="#">CDG</a>
-      </div>
+  <div class="container-fluid">
+      <button class="navbar-toggler" type="button" id="menuToggle" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">CDG</a>
+  </div>
 </nav>
 
-<div class="container main-content">
-  <div class="col-12 text-center mb-4">
-      <h1>Bem-vindo, {{ nome_usuario }}!</h1>
-  </div>
+    <div class="main-content">
+        <div class="col-12 text-center mb-4">
+            <h1 class="display-6">Bem-vindo, {{ nome_usuario }}!</h1>
+        </div>
 
-  <div class="row g-4"> <!-- Classe g-4 para espaçamento entre os cards -->
-      <div class="col-12 col-md-6"> <!-- Dois cards por linha -->
-          <a href="form/">
-              <div class="card shadow-sm h-100">
-                  <img src="{% static 'IMG/input.png' %}" class="card-img-top" alt="Cadastrar">
-                  <div class="card-body">
-                      <h5 class="card-title">Cadastrar</h5>
-                      <p class="card-text">Cadastre novos produtos no sistema com facilidade.</p>
-                      <p class="card-text"><small class="text-muted">Última atualização 3 mins atrás</small></p>
+        <div class="row d-flex flex-column w-100">
+          <div class="col-12 mb-3">
+            <a href="form/">
+                <div class="card mb-4 w-100">
+                    <div class="card-body">
+                        <!-- Imagem ou ícone no card -->
+                        <img src="{% static 'IMG/input.png' %}" alt="Icone" class="card-img-top" style="width: 50px; height: 50px; object-fit: cover; margin-bottom: 30px;">
+                        <h5 class="card-title">Cadastrar</h5>
+                        <p class="card-text">Cadastre novos produtos no sistema com facilidade.</p>
+                        <p class="card-text"><small class="text-muted">Última atualização 3 mins atrás</small></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+          <div class="col-12 mb-3">
+              <a href="home/">
+                  <div class="card mb-4 w-100">
+                      <div class="card-body">
+                          <img src="{% static 'IMG/inventory.png' %}" alt="Icone" class="card-img-top" style="width: 50px; height: 50px; object-fit: cover; margin-bottom: 30px;">
+                          <h5 class="card-title">Listagem</h5>
+                          <p class="card-text">Veja a listagem dos produtos cadastrados.</p>
+                          <p class="card-text"><small class="text-muted">Última atualização 3 mins atrás</small></p>
+                      </div>
                   </div>
-              </div>
-          </a>
-      </div>
-      <div class="col-12 col-md-6">
-          <a href="home/">
-              <div class="card shadow-sm h-100">
-                  <img src="{% static 'IMG/to-do-list.png' %}" class="card-img-top" alt="Listagem">
-                  <div class="card-body">
-                      <h5 class="card-title">Listagem</h5>
-                      <p class="card-text">Veja a listagem dos produtos cadastrados.</p>
-                      <p class="card-text"><small class="text-muted">Última atualização 3 mins atrás</small></p>
+              </a>
+          </div>
+          <div class="col-12 mb-3">
+              <a href="estoque/">
+                  <div class="card mb-4 w-100">
+                      <div class="card-body">
+                        <img src="{% static 'IMG/to-do-list.png' %}" alt="Icone" class="card-img-top" style="width: 50px; height: 50px; object-fit: cover; margin-bottom: 30px;">
+                          <h5 class="card-title">Estoque</h5>
+                          <p class="card-text">Gerencie seu estoque de maneira eficiente.</p>
+                          <p class="card-text"><small class="text-muted">Última atualização 3 mins atrás</small></p>
+                      </div>
                   </div>
-              </div>
-          </a>
-      </div>
-      <div class="col-12 col-md-6">
-          <a href="estoque/">
-              <div class="card shadow-sm h-100">
-                  <img src="{% static 'IMG/inventory.png' %}" class="card-img-top" alt="Estoque">
-                  <div class="card-body">
-                      <h5 class="card-title">Estoque</h5>
-                      <p class="card-text">Gerencie seu estoque de maneira eficiente.</p>
-                      <p class="card-text"><small class="text-muted">Última atualização 3 mins atrás</small></p>
+              </a>
+          </div>
+          <div class="col-12 mb-3">
+              <a href="dashboard/">
+                  <div class="card mb-4 w-100">
+                      <div class="card-body">
+                        <img src="{% static 'IMG/dashboard.png' %}" alt="Icone" class="card-img-top" style="width: 50px; height: 50px; object-fit: cover; margin-bottom: 30px;">
+                          <h5 class="card-title">Dashboard</h5>
+                          <p class="card-text">Gerencie seu Dashboard de maneira eficiente.</p>
+                          <p class="card-text"><small class="text-muted">Última atualização 3 mins atrás</small></p>
+                      </div>
                   </div>
-              </div>
-          </a>
+              </a>
+          </div>
       </div>
-      <div class="col-12 col-md-6">
-          <a href="dashboard/">
-              <div class="card shadow-sm h-100">
-                  <img src="{% static 'IMG/dashboard.png' %}" class="card-img-top" alt="Dashboard">
-                  <div class="card-body">
-                      <h5 class="card-title">Dashboard</h5>
-                      <p class="card-text">Gerencie seu Dashboard de maneira eficiente.</p>
-                      <p class="card-text"><small class="text-muted">Última atualização 3 mins atrás</small></p>
-                  </div>
-              </div>
-          </a>
-      </div>
-  </div>
-</div>
-
+      
+    </div>
 
     {% if messages %}
 
@@ -155,7 +153,6 @@
             {% endfor %}
         }
   {% endif %}
-      </script>
     <script src="{% static 'js/script_index_btn.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
