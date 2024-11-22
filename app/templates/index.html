@@ -27,8 +27,8 @@
                 Cadastro
             </a>
             <a href="/home">
-                <i class="fas fa-list me-2"></i> <!-- Ícone de listagem -->
-                Listagem
+                <i class="fas fa-list me-2"></i> <!-- Ícone de Movimentações -->
+                Movimentações
             </a>
             <a href="/estoque">
                 <i class="fas fa-boxes-stacked me-2"></i> <!-- Ícone de estoque -->
@@ -63,7 +63,7 @@
             <div class="row mb-4">
             <h1>
                 <center>
-                    Registro de dados gerais
+                    Movimentações
                 </center>
             </h1>
             <!-- Conteúdo principal -->
@@ -119,14 +119,14 @@
                                     <td id="entrada_saida_alert">{{ dbs.entrada_saida }}</td>
                                     <td id="data-{{ dbs.id }}">{{ dbs.data }}</td>
                         
-                                    <td>
+                                    <td  style="white-space: nowrap;">
                                         <strong>
                                             {{ dbs.qtde }} {{ dbs.tipo }}
                                         </strong>
                                     </td>
                                     <td>{{ dbs.formato }}</td>
                                     <td>{{ dbs.nome }}</td>
-                                    <td>{{ dbs.tipo_de_material }}</td>
+                                    <td  style="white-space: nowrap;">{{ dbs.tipo_de_material }}</td>
                                     <td>
                                         {% if dbs.formato_da_folha == 'null' or dbs.formato_da_folha == 'nan' or not dbs.formato_da_folha %}
                                             N/A
@@ -173,7 +173,9 @@
             </ul>
         </nav>
     </div>
-
+    <footer class="footer text-white text-center py-3 mt-4" style="background-color: #343a40;">
+        <p>&copy; 2024 CDG Estoque. Todos os direitos reservados.</p>
+      </footer>
     {% if messages %}
 
     <!-- Modal -->
@@ -211,9 +213,6 @@
         {% endfor %}
       }
     {% endif %}
-    <footer class="footer mt-4 text-center">
-        <p>&copy; 2024 CDG Estoque. Todos os direitos reservados.</p>
-    </footer>
 </script>
     <script src="{% static 'js/script_index.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
