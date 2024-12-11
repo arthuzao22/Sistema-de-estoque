@@ -75,7 +75,7 @@
                 <tbody>
                   {% for item in estoque_total_geral %}
                     <tr>
-                      <td>{{ item.tipo_de_material }}</td>
+                      <td>{{ item.tipo_de_material }}{% if item.formato_da_folha == 'null' %} {% else %} - {{ item.formato_da_folha }}{% endif %}</td>
                       <td>{{ item.estoque_total }} {{ item.tipo }}</td>
                     </tr>
                   {% endfor %}
@@ -84,7 +84,6 @@
             </div>
           </div>
 
-          <!-- Segunda Tabela -->
           <div class="col-lg-6 col-md-12 mb-4">
             <div class="card p-3">
               <h2 class="text-center">Quantidade em Estoque</h2>
@@ -97,21 +96,22 @@
                 </thead>
                 <tbody>
                   {% if estoque_total %}
-                    {% for tipo_material, quantidade in estoque_total.items %}
+                    {% for item in estoque_total %}
                       <tr>
-                        <td>{{ tipo_material }}</td>
-                        <td>{{ quantidade|default:0 }} Unidades</td>
+                        <td>{{ item.tipo_de_material }}{% if item.formato_da_folha == 'null' %} {% else %} - {{ item.formato_da_folha }}{% endif %}</td>
+                        <td>{{ item.estoque_total }} Unidades</td>
                       </tr>
                     {% endfor %}
                   {% else %}
                     <tr>
-                      <td colspan="2" class="text-center">Nenhum dado disponível.</td>
+                      <td colspan="3" class="text-center">Nenhum dado disponível.</td>
                     </tr>
                   {% endif %}
                 </tbody>
               </table>
             </div>
           </div>
+          
         </div>
       </div>
     </div>

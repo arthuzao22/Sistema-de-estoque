@@ -334,10 +334,14 @@ def calcular_Wireo(row):
         return 0
     
 def calcular_estoque_total(df):
-    entradas = df[df['entrada_saida'] == 'Entrada'].groupby('tipo_de_material')['qtde_final'].sum()
-    saidas = df[df['entrada_saida'] == 'Saida'].groupby('tipo_de_material')['qtde_final'].sum()
-    estoque_total = entradas.subtract(saidas, fill_value=0)
+    # Agrupa as entradas por tipo_de_material e formato_da_folha
+    entradas = df[df['entrada_saida'] == 'Entrada'].groupby(['tipo_de_material', 'formato_da_folha'])['qtde_final'].sum()
+    # Agrupa as saídas por tipo_de_material e formato_da_folha
+    saidas = df[df['entrada_saida'] == 'Saida'].groupby(['tipo_de_material', 'formato_da_folha'])['qtde_final'].sum()
+    # Calcula o estoque total considerando as entradas e saídas
+    estoque_total = entradas.subtract(saidas, fill_value=0).reset_index(name='estoque_total')
     return estoque_total
+
 
 def calcular_estoque_total_especifico(df):
     # Ajusta as quantidades para o tipo de material específico
@@ -393,8 +397,8 @@ def calcular_estoque_total_especifico(df):
     df.loc[df['tipo'] == 'Pacotes', 'tipo'] = 'Cx'
         
     # Agrupa as quantidades por tipo de material e tipo
-    entradas = df[df['entrada_saida'] == 'Entrada'].groupby(['tipo_de_material', 'tipo'])['qtde'].sum()
-    saidas = df[df['entrada_saida'] == 'Saida'].groupby(['tipo_de_material', 'tipo'])['qtde'].sum()
+    entradas = df[df['entrada_saida'] == 'Entrada'].groupby(['tipo_de_material', 'tipo', 'formato_da_folha'])['qtde'].sum()
+    saidas = df[df['entrada_saida'] == 'Saida'].groupby(['tipo_de_material', 'tipo', 'formato_da_folha'])['qtde'].sum()
     
     # Calcula o estoque total
     estoque_total_geral = entradas.subtract(saidas, fill_value=0).reset_index(name='estoque_total') 

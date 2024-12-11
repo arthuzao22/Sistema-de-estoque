@@ -181,7 +181,7 @@ def delete(request, pk):
 
 ############################################################# CALCULOS DE ESTOQUE #############################################################
 
-@login_required(login_url='/login/')  
+@login_required(login_url='/login/')
 def estoque(request):
     try:
         # Obtém os filtros da solicitação GET
@@ -192,7 +192,12 @@ def estoque(request):
         conn = get_connection()
         query = "SELECT * FROM Estoque"
         df = pd.read_sql_query(query, conn)
-        
+
+        # Verifica se o DataFrame está vazio
+        if df.empty:
+            messages.warning(request, "Nenhum dado encontrado na tabela Estoque.")
+            return render(request, 'estoque.html', {'df_geral': [], 'estoque_total': [], 'estoque_total_geral': []})
+
         # Converte campos numéricos para Decimal
         df['qtde'] = df['qtde'].apply(Decimal)
 
@@ -211,40 +216,42 @@ def estoque(request):
 
         # Cálculo de quantidade final
         df['qtde_final'] = df[['qtde_placas_unidades', 'qtde_folhas_caixa', 'qtde_bobinas',
-                               'qtde_bobinas_ensacamento', 'qtde_contra_capa', 
-                               'qtde_granpeador', 'qtde_grampos', 'qtde_folhas_caixa_2', 
+                               'qtde_bobinas_ensacamento', 'qtde_contra_capa',
+                               'qtde_granpeador', 'qtde_grampos', 'qtde_folhas_caixa_2',
                                'qtde_tintas_toners', 'qtde_Wireo', 'qtde_espiral']].sum(axis=1, skipna=True)
 
         # Cálculo do estoque total e total geral
         estoque_total = calcular_estoque_total(df)
         estoque_total_geral = calcular_estoque_total_especifico(df)
 
-        # Converte os resultados para dicionário
-        estoque_total_dict = estoque_total.to_dict()
-        estoque_total_geral_dict = estoque_total_geral.to_dict(orient='records')
+        # Converte os resultados para listas de dicionários
+        estoque_total_list = estoque_total.to_dict(orient='records') if not estoque_total.empty else []
+        estoque_total_geral_list = estoque_total_geral.to_dict(orient='records') if not estoque_total_geral.empty else []
 
         # Filtra o estoque_total pelo tipo de material, se fornecido
         if tipo_de_material:
-            estoque_total_dict = {tipo: qtd for tipo, qtd in estoque_total_dict.items()
-                                  if tipo_de_material.lower() in tipo.lower()}
+            estoque_total_list = [item for item in estoque_total_list
+                                  if tipo_de_material.lower() in item['tipo_de_material'].lower()]
 
         # Filtra o estoque_total pelo tipo_material_geral, se fornecido
         if tipo_material_geral:
-            estoque_total_geral_dict = [item for item in estoque_total_geral_dict
+            estoque_total_geral_list = [item for item in estoque_total_geral_list
                                         if tipo_material_geral.lower() in item['tipo_de_material'].lower()]
 
         # Adiciona os dados ao contexto
         context = {
             'df_geral': df.to_dict(orient='records'),
-            'estoque_total': estoque_total_dict,
-            'estoque_total_geral': estoque_total_geral_dict
+            'estoque_total': estoque_total_list,
+            'estoque_total_geral': estoque_total_geral_list,
         }
 
         return render(request, 'estoque.html', context)
 
     except Exception as e:
         messages.error(request, f"Erro ao carregar a página de estoque: {e}")
-        return render(request, 'estoque.html')
+        return render(request, 'estoque.html', {'df_geral': [], 'estoque_total': [], 'estoque_total_geral': []})
+
+
 
     
 ########################################################## LOGIN ###############################################################
